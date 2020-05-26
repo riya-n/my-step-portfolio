@@ -1,9 +1,26 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+body {
+    background-color: whitesmoke;
+    margin: 30px 100px 30px 100px;
 }
-
-#greeting-container {
-  margin-top: 20px;
+#top-bar {
+    background-color: lightgray;
+    padding: 20px;
+}
+#bottom-bar {
+    background-color: lightgray;
+    padding: 20px;
+    text-align: -webkit-center;
+}
+#name-container {
+    font-size: 30px;
+}
+#navbar-container {
+  	float: right;
+    font-size: 20px
+}
+#content-container {
+  	background-color: lightblue;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 20px;
 }
