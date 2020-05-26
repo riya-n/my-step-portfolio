@@ -2,17 +2,40 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Riya Narayan</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+        <div id="top-bar">
+            <img src="" href="/index.html" /> 
+            <span id="name-container">Riya Narayan</span>
+            <span id="navbar-container">
+                <a href="/index.html">Home</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/gallery.html">Gallery</a>
+            </span>
+        </div>
+        <div id="content-container">
+            <img src="/images/profile.jpg" width="300px"/>
+            <div>
+                <h2>Hello!</h2>
+                <div>bio stuff here...</div>
+                <div>
+                    Click 
+                    <button onclick="addRandomQuote()">here</button> 
+                    to get a random quote from one of my favorite shows - Friends!
+                </div>
+                <div id="quote-container"></div>
+            </div>
+        </div>
+        <div id="bottom-bar">
+            <span>
+                <a href="https://www.linkedin.com/in/riya-narayan/">My Linkedin</a>
+                <a href="https://github.com/riya-n">My Github</a>
+            </span>
+        </div>
     </div>
   </body>
 </html>
