@@ -26,3 +26,14 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function addRandomQuote() {
+    const quotes = ['We were on a break!', "Joey doesn't share food", 
+    'Pivot!', "I wish I could, but I don't want to"];
+
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+    const quoteContainer = document.getElementById("quote-container");
+    console.log('the quote is', quote)
+    quoteContainer.innerText = quote;
+}
