@@ -59,11 +59,26 @@ a:hover {
 button {
     border: none;
     cursor: pointer;
-    color: blue;
     background-color: lightgrey;
     padding: 0px;
     font-size: inherit;
     font-family: "Times New Roman";
+    color: darkslategrey;
+    font-weight: inherit;
+    text-decoration: underline;
+}
+
+button:hover {
+    color: cornflowerblue
+}
+
+#greeting-container {
+    text-decoration: none;
+}
+
+#quote-container {
+    color: cornflowerblue;
+    margin-top: 10px;
 }
 
 .row {
