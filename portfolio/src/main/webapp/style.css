@@ -2,25 +2,51 @@ body {
     background-color: whitesmoke;
     margin: 30px 100px 30px 100px;
 }
-#top-bar {
-    background-color: lightgray;
+div {
+    color: darkslategrey;
+}
+.bar {
+    background-color: lightblue;
     padding: 20px;
 }
 #bottom-bar {
-    background-color: lightgray;
-    padding: 20px;
     text-align: -webkit-center;
 }
 #name-container {
-    font-size: 30px;
+    font-size: 20px;
+    color: grey;
 }
 #navbar-container {
   	float: right;
     font-size: 20px
 }
 #content-container {
-  	background-color: lightblue;
+  	background-color: lightgrey;
     margin-top: 30px;
     margin-bottom: 30px;
     padding: 20px;
+    text-align: -webkit-center;
+}
+a {
+    text-decoration: none;
+    color: whitesmoke;
+    margin: 10px;
+}
+.active {
+    color: grey;
+}
+a:hover {
+    color: grey;
+}
+#profile-picture {
+    width: 300px;
+}
+button {
+    border: none;
+    cursor: pointer;
+    color: blue;
+    background-color: lightgrey;
+    padding: 0px;
+    font-size: inherit;
+    font-family: "Times New Roman";
 }
