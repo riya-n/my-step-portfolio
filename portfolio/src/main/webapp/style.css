@@ -69,7 +69,7 @@ button {
 }
 
 button:hover {
-    color: cornflowerblue
+    color: cadetblue;
 }
 
 #greeting-container {
@@ -77,8 +77,9 @@ button:hover {
 }
 
 #quote-container {
-    color: cornflowerblue;
+    color: cadetblue;
     margin-top: 10px;
+    font-size: 18px;
 }
 
 .row {
