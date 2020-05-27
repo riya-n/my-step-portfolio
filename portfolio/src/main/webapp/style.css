@@ -83,7 +83,7 @@ button:hover {
 }
 
 #quote-container {
-    color: #f5f6fa;
+    color: #f48b52;
     margin-top: 10px;
     font-size: 18px;
 }
@@ -94,6 +94,7 @@ button:hover {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   padding: 0 4px;
+  margin-bottom: 15px;
 }
 
 .column {
@@ -109,12 +110,12 @@ button:hover {
   width: 100%;
 }
 
-#projects-container {
-    margin-right: 30px;
-    margin-left: 30px;
+.info-container {
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
-.project {
+.info {
     margin: 10px;
     padding: 10px;
 }

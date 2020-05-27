@@ -19,14 +19,14 @@
         </div>
         <div id="content-container">
             <img id="profile-picture" src="/images/profile.jpg" />
-            <div id="bio">
-                <h2>
-                    <button onclick="addRandomGreeting()" id="greeting-container">
-                        Hello!
-                    </button> 
-                    I'm Riya.
-                </h2>
-                <hr/>
+            <h2>
+                <button onclick="addRandomGreeting()" id="greeting-container">
+                    Hello!
+                </button> 
+                I'm Riya.
+            </h2>
+            <hr/>
+            <div class="info-container">
                 <p>
                     I was born in Stanford, California, 
                     and lived there for about 4 years before 
@@ -39,13 +39,16 @@
                     in Economics at the University of Pennsylvania.
                 </p>
                 <hr/>
-                <div>
-                    Click 
-                    <button onclick="addRandomQuote()">here</button> 
-                    to get a random quote from one of my favorite shows - Friends!
+                <div class="info">
+                    <div>
+                        Click 
+                        <button onclick="addRandomQuote()">here</button> 
+                        to get a random quote from one of my favorite shows - Friends!
+                    </div>
+                    <div id="quote-container"></div>
                 </div>
-                <div id="quote-container"></div>
             </div>
+            <hr/>
         </div>
         <div class="bar" id="bottom-bar">
             <span>
