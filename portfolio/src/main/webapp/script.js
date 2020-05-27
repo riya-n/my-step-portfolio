@@ -37,8 +37,11 @@ function addRandomGreeting() {
 function addRandomQuote() {
     const quotes = ['We were on a break!', "Joey doesn't share food", 
     'PIVOT!', "You don’t own a TV? What’s all your furniture pointed at?",
-    "They don’t know that we know they know we know.",
-    "I’m not so good with the advice. Can I interest you in a sarcastic comment?"];
+    "They don’t know that we know they know we know.", "He's a transponster!",
+    "I’m not so good with the advice. Can I interest you in a sarcastic comment?",
+    'Could I BE wearing any more clothes?', "You’ve been BAMBOOZLED!",
+    "It's like a cow’s opinion. It just doesn’t matter. It’s moo.",
+    'Gum would be perfection.'];
 
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
