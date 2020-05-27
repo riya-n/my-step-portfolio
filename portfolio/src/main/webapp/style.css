@@ -1,25 +1,35 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
     background-color: whitesmoke;
     margin: 30px 100px 30px 100px;
 }
+
 div {
     color: darkslategrey;
 }
+
 .bar {
     background-color: lightblue;
     padding: 20px;
 }
+
 #bottom-bar {
     text-align: -webkit-center;
 }
+
 #name-container {
     font-size: 20px;
     color: grey;
 }
+
 #navbar-container {
   	float: right;
     font-size: 20px
 }
+
 #content-container {
   	background-color: lightgrey;
     margin-top: 30px;
@@ -27,20 +37,25 @@ div {
     padding: 20px;
     text-align: -webkit-center;
 }
+
 a {
     text-decoration: none;
     color: whitesmoke;
     margin: 10px;
 }
+
 .active {
     color: grey;
 }
+
 a:hover {
     color: grey;
 }
+
 #profile-picture {
     width: 300px;
 }
+
 button {
     border: none;
     cursor: pointer;
@@ -49,4 +64,25 @@ button {
     padding: 0px;
     font-size: inherit;
     font-family: "Times New Roman";
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+.column {
+  -ms-flex: 33%;
+  flex: 33%;
+  max-width: 33%;
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%;
 }
