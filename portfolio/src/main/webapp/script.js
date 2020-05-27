@@ -35,7 +35,7 @@ function addRandomGreeting() {
 }
 
 function addRandomQuote() {
-    const quotes = ['We were on a break!', "Joey doesn't share food", 
+  const quotes = ['We were on a break!', "Joey doesn't share food", 
     'PIVOT!', "You don’t own a TV? What’s all your furniture pointed at?",
     "They don’t know that we know they know we know.", "He's a transponster!",
     "I’m not so good with the advice. Can I interest you in a sarcastic comment?",
@@ -43,9 +43,9 @@ function addRandomQuote() {
     "It's like a cow’s opinion. It just doesn’t matter. It’s moo.",
     'Gum would be perfection.'];
 
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+  const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-    const quoteContainer = document.getElementById("quote-container");
+  const quoteContainer = document.getElementById("quote-container");
 
-    quoteContainer.innerText = '"' + quote + '"';
+  quoteContainer.innerText = '"' + quote + '"';
 }

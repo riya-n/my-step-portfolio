@@ -3,105 +3,107 @@
 }
 
 body {
-    background-color: #f5f6fa;
-    margin: 30px 200px 30px 200px;
+  background-color: #f5f6fa;
+  margin: 30px 200px 30px 200px;
 }
 
 div {
-    color: darkslategrey;
+  color: darkslategrey;
 }
 
 .bar {
-    background-color: #f48b52;
-    padding: 20px;
+  background-color: #f48b52;
+  padding: 20px;
 }
 
 #bottom-bar {
-    text-align: -webkit-center;
+  text-align: -webkit-center;
 }
 
 #name-container {
-    font-size: 20px;
-    color: darkslategrey;
+  color: darkslategrey;
+  font-size: 20px;
 }
 
 #navbar-container {
-  	float: right;
-    font-size: 20px
+  float: right;
+  font-size: 20px
 }
 
 #content-container {
-  	background-color: #b1dfd5;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    padding: 20px;
-    text-align: -webkit-center;
+  background-color: #b1dfd5;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+  text-align: -webkit-center;
 }
 
 a {
-    text-decoration: none;
-    color: #f5f6fa;
-    margin: 10px;
+  color: #f5f6fa;
+  margin: 10px;
+  text-decoration: none;
 }
+
 a.repo {
-    color: #f48b52;
+  color: #f48b52;
 }
 
 .active {
-    color: darkslategrey;
+  color: darkslategrey;
 }
 
 a:hover {
-    color: darkslategrey;
+  color: darkslategrey;
 }
+
 a.repo:hover {
-    color: #f5f6fa;
+  color: #f5f6fa;
 }
 
 #profile-picture {
-    width: 300px;
+  width: 300px;
 }
 
 button {
-    border: none;
-    cursor: pointer;
-    background-color: #b1dfd5;
-    padding: 0px;
-    font-size: inherit;
-    font-family: "Times New Roman";
-    color: darkslategrey;
-    font-weight: inherit;
-    text-decoration: underline;
+  background-color: #b1dfd5;
+  border: none;
+  color: darkslategrey;
+  cursor: pointer;
+  font-family: "Times New Roman";
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0px;
+  text-decoration: underline;
 }
 
 button:hover {
-    color: #f48b52;
+  color: #f48b52;
 }
 
 #greeting-container {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #quote-container {
-    color: #f48b52;
-    margin-top: 10px;
-    font-size: 18px;
+  color: #f48b52;
+  font-size: 18px;
+  margin-top: 10px;
 }
 
 .row {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  padding: 0 4px;
   margin-bottom: 15px;
+  padding: 0 4px;
+  -ms-flex-wrap: wrap;
 }
 
 .column {
-  -ms-flex: 33%;
   flex: 33%;
   max-width: 33%;
   padding: 0 4px;
+  -ms-flex: 33%;
 }
 
 .column img {
@@ -111,26 +113,26 @@ button:hover {
 }
 
 .info-container {
-    margin-right: 20px;
-    margin-left: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .info {
-    margin: 10px;
-    padding: 10px;
+  margin: 10px;
+  padding: 10px;
 }
 
 .project-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .project-description {
-    font-style: italic;
+  font-style: italic;
 }
 
 .project-explanation {
-    margin-bottom: 5px;
-    margin-top: 5px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
