@@ -43,6 +43,9 @@ a {
     color: #f5f6fa;
     margin: 10px;
 }
+a.repo {
+    color: #f48b52;
+}
 
 .active {
     color: darkslategrey;
@@ -50,6 +53,9 @@ a {
 
 a:hover {
     color: darkslategrey;
+}
+a.repo:hover {
+    color: #f5f6fa;
 }
 
 #profile-picture {
@@ -101,4 +107,29 @@ button:hover {
   margin-top: 8px;
   vertical-align: middle;
   width: 100%;
+}
+
+#projects-container {
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+.project {
+    margin: 10px;
+    padding: 10px;
+}
+
+.project-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.project-description {
+    font-style: italic;
+}
+
+.project-explanation {
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
