@@ -4,7 +4,7 @@
 
 body {
   background-color: #f5f6fa;
-  margin: 30px 200px 30px 200px;
+  margin: 2% 5%;
 }
 
 div {
@@ -18,16 +18,17 @@ div {
 
 #bottom-bar {
   text-align: -webkit-center;
+  font-size: 18px;
 }
 
 #name-container {
   color: darkslategrey;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 #navbar-container {
   float: right;
-  font-size: 20px
+  font-size: 25px
 }
 
 #content-container {
@@ -115,6 +116,7 @@ button:hover {
 .info-container {
   margin-right: 20px;
   margin-left: 20px;
+  font-size: 18px;
 }
 
 .info {
@@ -123,7 +125,7 @@ button:hover {
 }
 
 .project-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   margin-bottom: 5px;
 }
