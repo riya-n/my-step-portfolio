@@ -65,22 +65,6 @@ a.repo:hover {
   width: 300px;
 }
 
-button {
-  background-color: #b1dfd5;
-  border: none;
-  color: darkslategrey;
-  cursor: pointer;
-  font-family: "Times New Roman";
-  font-size: inherit;
-  font-weight: inherit;
-  padding: 0px;
-  text-decoration: underline;
-}
-
-button:hover {
-  color: #f48b52;
-}
-
 #greeting-container {
   text-decoration: none;
 }
@@ -114,12 +98,15 @@ button:hover {
 }
 
 .info-container {
+  border-bottom: 1px outset #f5f6fa;
+  border-top: 1px inset #f5f6fa;
   margin-right: 20px;
   margin-left: 20px;
   font-size: 18px;
 }
 
 .info {
+  border-top: 1px inset #f5f6fa;
   margin: 10px;
   padding: 10px;
 }
@@ -137,4 +124,20 @@ button:hover {
 .project-explanation {
   margin-bottom: 5px;
   margin-top: 5px;
+}
+
+.span-button {
+    cursor: pointer;
+    font-size: inherit;
+    text-decoration: underline;
+}
+
+.span-button:hover {
+    color: #f48b52;
+}
+
+#short-bio {
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 20px;
 }

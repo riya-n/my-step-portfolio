@@ -15,26 +15,18 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+function showRandomGreeting() {
   const greetings =
       ['Hello!', '¡Hola!', 'Ni Hao!', 'Bonjour!', 'Namaste!', 
       'Sawasdee Kha!', 'Konnichiwa!'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
-
-  const curr = greetingContainer.innerText
-  if (curr === greeting) {
-    greeting = greetings[Math.floor(Math.random() * greetings.length)];
-  }
+  const curr = greetingContainer.innerText;
+  const greeting = getRandomItem(curr, greetings);
 
   greetingContainer.innerText = greeting;
 }
 
-function addRandomQuote() {
+function showRandomQuote() {
   const quotes = ['We were on a break!', "Joey doesn't share food", 
     'PIVOT!', "You don’t own a TV? What’s all your furniture pointed at?",
     "They don’t know that we know they know we know.", "He's a transponster!",
@@ -42,10 +34,18 @@ function addRandomQuote() {
     'Could I BE wearing any more clothes?', "You’ve been BAMBOOZLED!",
     "It's like a cow’s opinion. It just doesn’t matter. It’s moo.",
     'Gum would be perfection.'];
-
-  const quote = quotes[Math.floor(Math.random() * quotes.length)];
-
   const quoteContainer = document.getElementById("quote-container");
-
+  let curr = quoteContainer.innerText;
+  curr = curr.substring(1, curr.length - 1);
+  const quote = getRandomItem(curr, quotes);
   quoteContainer.innerText = '"' + quote + '"';
+}
+
+function getRandomItem(curr, arr) {
+    let item = arr[Math.floor(Math.random() * arr.length)];
+    if (curr === item) {
+        let filteredArr = arr.filter(e => e!== curr)
+        item = filteredArr[Math.floor(Math.random() * filteredArr.length)];
+    }
+    return item;
 }
