@@ -2,17 +2,82 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Meet Riya</title>
+    <link rel="shortcut icon" type="image/png" href="/images/icon.png">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <div class="bar" id="top-bar">
+        <span id="name-container">Riya Narayan</span>
+        <span id="navbar-container">
+          <a class="active" href="/index.html">Home</a>
+          <a href="/projects.html">Projects</a>
+          <a href="/gallery.html">Gallery</a>
+        </span>
+      </div>
+      <div id="content-container">
+        <img id="profile-picture" src="/images/profile.jpg" alt="profile picture">
+        <h1>
+          <span class="span-button" onclick="showRandomGreeting()"
+          id="greeting-container">
+            Hello!
+          </span> 
+          I'm Riya.
+        </h1>
+        <div id="short-bio">
+          Born in Stanford, CA, raised in Singapore, ethnically Indian;
+          traveled to 6 continents; Taekwondo black belt and
+          budding pianist.
+        </div>
+        <div class="info-container">
+          <p>
+            In high school, I was always challenged by my Math
+            and Physics classes. Even in Economics, which at times
+            seemed intuitive, there was always more to learn,
+            especially when it came to understanding current events
+            in the context of frameworks learned in the classroom.
+            These subjects intrigue me, they pushed me to learn more,
+            to achieve more - which is why I chose to study Computer
+            Science with a minor in Economics at the University of
+            Pennsylvania. As an aspiring “computer scientist” - as
+            I sometimes refer to myself, even though I’m only a rising
+            junior - there is always something exciting on my plate:
+            an unfinished group project, a new programming language
+            to learn, or some code that could be more efficient.
+            Despite many sleepless nights, I have learned the most
+            fascinating things. I want to be a software engineer
+            when I graduate from college. My recent conversations
+            with software engineers have convinced me that I would
+            love it. It is no secret that our life is becoming more
+            and more driven by technology, and I’m really excited to
+            get involved in the development of this new and exciting
+            world, with applications that are likely to change the
+            very way in which we live, work and play.
+          </p>
+          <div class="info">
+            <div>
+              Click 
+              <span onclick="showRandomQuote()" class="span-button">here</span> 
+              to get a random quote from one of my favorite shows - Friends!
+            </div>
+            <div id="quote-container"></div>
+            <div>
+              Click 
+              <span onclick="getData()" class="span-button">here</span> 
+              to get a message.
+            </div>
+            <div id="data-container"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bar" id="bottom-bar">
+        <span>
+          <a href="https://www.linkedin.com/in/riya-narayan/" target="_blank">LinkedIn</a>
+          <a href="https://github.com/riya-n" target="_blank">GitHub</a>
+        </span>
+      </div>
     </div>
   </body>
 </html>
