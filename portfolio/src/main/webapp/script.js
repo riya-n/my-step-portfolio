@@ -49,3 +49,9 @@ function getRandomItem(curr, arr) {
     }
     return item;
 }
+
+function getData() {
+  fetch('/data').then(response => response.text()).then((data) => {
+    document.getElementById('data-container').innerHTML = data;
+  });
+}
