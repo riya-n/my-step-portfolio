@@ -52,6 +52,10 @@ function getRandomItem(curr, arr) {
 
 function getData() {
   fetch('/data').then(response => response.text()).then((data) => {
-    document.getElementById('data-container').innerHTML = data;
+    let dataJson = JSON.parse(data);
+    console.log(data);
+    console.log(dataJson)
+    console.log(dataJson[0].name);
+    document.getElementById('data-container').innerText = 'Hello ' + dataJson[0].name;
   });
 }
