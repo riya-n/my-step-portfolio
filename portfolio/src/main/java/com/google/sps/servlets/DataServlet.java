@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.Query.*;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -55,12 +56,24 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      String comment = (String) entity.getProperty("comment");
+      comments.add(comment);
+    }
+    
     Gson gson = new Gson();
     String dataJson = gson.toJson(data);
     String peopleJson = gson.toJson(people);
+    String commentsJson = gson.toJson(comments);
     response.setContentType("application/json;");
     // response.setContentType("text/html;");
-    response.getWriter().println(dataJson);
+    response.getWriter().println(commentsJson);
   }
 
   @Override
@@ -75,7 +88,7 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
-    data.add(comment);
+    // data.add(comment);
     response.setContentType("text/html;");
     response.getWriter().println(comment);
     response.sendRedirect("/index.html");
