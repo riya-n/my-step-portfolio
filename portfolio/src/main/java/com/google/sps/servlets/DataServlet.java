@@ -57,8 +57,18 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     String dataJson = gson.toJson(data);
     String peopleJson = gson.toJson(people);
+    response.setContentType("application/json;");
+    // response.setContentType("text/html;");
+    response.getWriter().println(dataJson);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter("comment");
+    data.add(comment);
     response.setContentType("text/html;");
-    response.getWriter().println(peopleJson);
+    response.getWriter().println(comment);
+    response.sendRedirect("/index.html");
   }
 
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getData()">
     <div id="content">
       <div class="bar" id="top-bar">
         <span id="name-container">Riya Narayan</span>
@@ -67,6 +67,11 @@
               Click 
               <span onclick="getData()" class="span-button">here</span> 
               to get a message.
+              <form action="/data" method="POST">
+                <div>Comment:</div>
+                <input type="text" name="comment">
+                <input type="submit" value="Submit"/>
+              </form>
             </div>
             <div id="data-container"></div>
           </div>
