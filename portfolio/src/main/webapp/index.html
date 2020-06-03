@@ -67,7 +67,21 @@
               Click 
               <span onclick="getData()" class="span-button">here</span> 
               to get a message.
+              <!-- <form action="/data" method="GET">
+                <select name="number-of-comments" onchange="this.form.submit()">
+                   <option value="5">5</option>
+                   <option value="10" selected>10</option>
+                   <option value="15">15</option>
+                </select>
+              </form> -->
               <form action="/data" method="POST">
+                <!-- <input type="number" name="number-of-comments" value="10"> -->
+                <select name="number-of-comments" id="number-of-comments"
+                onchange="this.form.submit()">
+                   <option value="5">5</option>
+                   <option value="10">10</option>
+                   <option value="15">15</option>
+                </select>
                 <div>Comment:</div>
                 <input type="text" name="comment">
                 <input type="submit" value="Submit"/>

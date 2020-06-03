@@ -51,12 +51,16 @@ function getRandomItem(curr, arr) {
 }
 
 function getData() {
+    console.log("getData() called");
   fetch('/data').then(response => response.text()).then((data) => {
-    let dataJson = JSON.parse(data);
-    let myName = dataJson[0].name;
     console.log(data);
+    let dataJson = JSON.parse(data);
+    console.log(dataJson);
+    let comments = dataJson.comments;
+    let maxNum = dataJson.maxNumOfComments;
     // console.log(dataJson);
     // console.log(dataJson[0].name);
-    document.getElementById('data-container').innerText = 'Hello ' + dataJson;
+    document.getElementById('data-container').innerText = comments;
+    document.getElementById('number-of-comments').value = maxNum;
   });
 }
