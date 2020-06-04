@@ -64,3 +64,12 @@ function getData() {
     document.getElementById('number-of-comments').value = maxNum;
   });
 }
+
+function deleteData() {
+    // fetch('/delete-task', {method: 'POST', body: params});
+    fetch('/delete-data', {method: 'POST'})
+      .then(response => response.text()).then((data) => {
+        console.log(data);
+        getData()
+    })
+}
