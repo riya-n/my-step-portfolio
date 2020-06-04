@@ -19,23 +19,16 @@ public class DeleteDataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    log.info("LOGGER WORKING");
     Query query = new Query("Comment");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     for (Entity key : results.asIterable()) {
-      log.info("LOOK: " + key.getKey());
       datastore.delete(key.getKey());
     }
-    // log.info("LOOK HERE " + results);
-    // datastore.delete("aglub19hcHBfaWRyFAsSB0NvbW1lbnQYgICAgICAkAgM");
-    // for (Entity key : results.asIterable()) {
-    // //   datastore.delete(key);
-    // }
 
-    response.setContentType("text/html;");
-    response.getWriter().println(results);
-    response.sendRedirect("/index.html"); 
+    // response.setContentType("text/html;");
+    // response.getWriter().println("");
+    // response.sendRedirect("/index.html"); 
   }
 
 }

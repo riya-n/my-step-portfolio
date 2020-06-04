@@ -29,46 +29,15 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-//   private List<String> data;
-//   private List<Person> people;
   private int maxNumOfComments;
-
-//   public class Person {
-//       String name;
-//       String birthday;
-
-//       Person(String name, String birthday) {
-//           this.name = name;
-//           this.birthday = birthday;
-//       }
-//   }
-// public class Comments {
-//     String maxNumOfComments;
-//     String comments;
-// }
 
   @Override
   public void init() {
-    // data = new ArrayList<>();
-    // data.add("first message");
-    // data.add("second message");
-    // data.add("third message");
-
-    // people = new ArrayList<>();
-    // people.add(new Person("Riya", "22Nov"));
-    // people.add(new Person("Sana", "2Aug"));
-    // people.add(new Person("Mars", "8Mar"));
-
     maxNumOfComments = 10; // default value
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // String maxNum = request.getParameter("number-of-comments");
-    // if (maxNum != null) {
-    //   maxNumOfComments = Integer.parseInt(maxNum);
-    // }
-
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -83,17 +52,11 @@ public class DataServlet extends HttpServlet {
     }
     
     Gson gson = new Gson();
-    // String dataJson = gson.toJson(data);
-    // String peopleJson = gson.toJson(people);
     String commentsJson = gson.toJson(comments);
     String json = "{\"maxNumOfComments\":" + maxNumOfComments +
       ", \"comments\":" + commentsJson + "}";
-    // String json = "{maxNumOfComments:" + maxNumOfComments
-    //   + ",comments:" + commentsJson + "}";
     response.setContentType("application/json;");
-    // response.setContentType("text/html;");
     response.getWriter().println(json);
-    // response.sendRedirect("/index.html");
   }
 
   @Override
@@ -114,7 +77,6 @@ public class DataServlet extends HttpServlet {
 
     }
     
-    // data.add(comment);
     response.setContentType("text/html;");
     response.getWriter().println(comment);
     response.sendRedirect("/index.html");

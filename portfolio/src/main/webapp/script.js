@@ -51,25 +51,19 @@ function getRandomItem(curr, arr) {
 }
 
 function getData() {
-    console.log("getData() called");
   fetch('/data').then(response => response.text()).then((data) => {
-    console.log(data);
     let dataJson = JSON.parse(data);
-    console.log(dataJson);
     let comments = dataJson.comments;
     let maxNum = dataJson.maxNumOfComments;
-    // console.log(dataJson);
-    // console.log(dataJson[0].name);
     document.getElementById('data-container').innerText = comments;
     document.getElementById('number-of-comments').value = maxNum;
   });
 }
 
 function deleteData() {
-    // fetch('/delete-task', {method: 'POST', body: params});
     fetch('/delete-data', {method: 'POST'})
       .then(response => response.text()).then((data) => {
         console.log(data);
-        getData()
+        getData();
     })
 }
