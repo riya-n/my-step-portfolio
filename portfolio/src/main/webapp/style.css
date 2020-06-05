@@ -141,3 +141,63 @@ a.repo:hover {
     font-size: 18px;
     margin-bottom: 20px;
 }
+
+#number-of-comments {
+  background-color: #f48b52;
+  padding: 5px;
+  border: none;
+  color: darkslategrey;
+  font-size: 18px;
+  float: left;
+}
+
+#number-of-comments-label {
+  float: left;
+  margin: 5px;
+  font-style: italic;
+  cursor: pointer;
+}
+
+option {
+  background-color: darkslategrey;
+  color: #f5f6fa;
+}
+
+#comments-box {
+  height: 40px;
+  margin-top: 10px;
+  width: -webkit-fill-available;
+  border: none;
+  padding: 10px;
+  background-color: #f5f6fa;
+  color: darkslategrey;
+}
+
+#submit-comment {
+  width: -webkit-fill-available;
+  border: none;
+  background-color: #f48b52;
+  color: #f5f6fa;
+  height: 30px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+input {
+  font-size: 18px;
+}
+
+#delete-comments {
+  float: right;
+  margin: 5px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin: 10px;
+  padding: 10px;
+  background-color: #a6ded2;
+}

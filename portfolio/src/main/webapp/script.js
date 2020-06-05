@@ -55,7 +55,19 @@ function getData() {
     let dataJson = JSON.parse(data);
     let comments = dataJson.comments;
     let maxNum = dataJson.maxNumOfComments;
-    document.getElementById('data-container').innerText = comments;
+
+    comments.forEach(comment => {
+      var element = document.createElement("li");
+      var text = document.createTextNode(comment);
+      element.appendChild(text);
+      document.getElementById("data-container").appendChild(element);
+    });
+
+    if (comments.length == 0) {
+        document.getElementById("data-container").innerText = "";
+    }
+
+    // document.getElementById('data-container').innerText = comments;
     document.getElementById('number-of-comments').value = maxNum;
   });
 }
