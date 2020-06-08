@@ -50,32 +50,31 @@ function getRandomItem(curr, arr) {
     return item;
 }
 
-function getData() {
-  fetch('/data').then(response => response.text()).then((data) => {
-    let dataJson = JSON.parse(data);
-    let comments = dataJson.comments;
-    let maxNum = dataJson.maxNumOfComments;
+function getComments() {
+  fetch('/comments').then(response => response.text()).then((data) => {
+    const dataJson = JSON.parse(data);
+    const comments = dataJson.comments;
+    const maxNum = dataJson.maxNumOfComments;
 
-    comments.forEach(comment => {
+    comments.forEach(({comment}) => {
       var element = document.createElement("li");
-      var text = document.createTextNode(comment);
+      const text = document.createTextNode(comment);
       element.appendChild(text);
-      document.getElementById("data-container").appendChild(element);
+      document.getElementById("comments-container").appendChild(element);
     });
 
     if (comments.length == 0) {
-        document.getElementById("data-container").innerText = "";
+        document.getElementById("comments-container").innerText = "";
     }
 
-    // document.getElementById('data-container').innerText = comments;
     document.getElementById('number-of-comments').value = maxNum;
   });
 }
 
-function deleteData() {
-    fetch('/delete-data', {method: 'POST'})
+function deleteComments() {
+    fetch('/delete-comments', {method: 'POST'})
       .then(response => response.text()).then((data) => {
         console.log(data);
-        getData();
+        getComments();
     })
 }

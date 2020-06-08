@@ -13,7 +13,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebServlet("/delete-data")
+/** Servlet that handles deletion of all comments. */
+@WebServlet("/delete-comments")
 public class DeleteDataServlet extends HttpServlet {
   final static Logger log = LoggerFactory.getLogger(DeleteDataServlet.class);
 
@@ -22,13 +23,9 @@ public class DeleteDataServlet extends HttpServlet {
     Query query = new Query("Comment");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    for (Entity key : results.asIterable()) {
-      datastore.delete(key.getKey());
+    for (Entity entity : results.asIterable()) {
+      datastore.delete(entity.getKey());
     }
-
-    // response.setContentType("text/html;");
-    // response.getWriter().println("");
-    // response.sendRedirect("/comments.html"); 
   }
 
 }

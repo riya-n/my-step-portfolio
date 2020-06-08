@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="getData()">
+  <body onload="getComments()">
     <div id="content">
       <div class="bar" id="top-bar">
         <span id="name-container">Riya Narayan</span>
@@ -21,25 +21,27 @@
       <div id="content-container">
         <h1>Leave a comment below!</h1>
         <div class="info-container">
-          <form action="/data" method="POST">
+          <form action="/comments" method="POST">
             <input type="text" name="comment"
               placeholder="Write something here..." id="comments-box">
             <input type="submit" value="Submit" id="submit-comment"/>
-            <div class="info">
+          </form>
+          <div class="info">
+            <form action="/comments" method="POST">
               <select name="number-of-comments" id="number-of-comments"
                 onchange="this.form.submit()">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
               </select>
-              <label for="number-of-comments" id="number-of-comments-label">
-                (Maximum number of comments displayed)</label>
-              <span onclick="deleteData()" class="span-button" id="delete-comments">
-                Delete All Comments</span>
+            </form>
+            <label for="number-of-comments" id="number-of-comments-label">
+              (Maximum number of comments displayed)</label>
+            <span onclick="deleteComments()" class="span-button" id="delete-comments">
+              Delete All Comments</span>
             <br>
-            </div>
-            <ul class="info" id="data-container"></ul>
-          </form>
+          </div>
+          <ul class="info" id="comments-container"></ul>
         </div>
       </div>
       <div class="bar" id="bottom-bar">
