@@ -20,17 +20,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.ArrayList;
 import com.google.gson.Gson;
-import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import static com.google.sps.servlets.Constants.DEFAULT_COMMENTS_DISPLAYED;
+import com.google.sps.servlets.CommentsDatastore.Comment;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
-public class DataServlet extends HttpServlet {
+public class CommentsServlet extends HttpServlet {
 
   private int maxNumOfComments;
+  private CommentsDatastore commentsDatastore;
 
   public class CommentsApiResponse {
     private int maxNumOfComments;
@@ -43,41 +42,23 @@ public class DataServlet extends HttpServlet {
     }
   }
 
-  public class Comment {
-    private String comment;
-    private long timestamp;
-
-    public Comment(String comment, long timestamp) {
-      this.comment = comment;
-      this.timestamp = timestamp;
-    }
-  } 
-
   @Override
   public void init() {
     maxNumOfComments = DEFAULT_COMMENTS_DISPLAYED;
+    commentsDatastore = new CommentsDatastore();
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    List<Entity> results = datastore.prepare(query)
-      .asList(FetchOptions.Builder.withLimit(maxNumOfComments));
 
-    List<Comment> comments = new ArrayList<>();
-    for (Entity entity : results) {
-      String comment = (String) entity.getProperty("comment");
-      long timestamp = (long) entity.getProperty("timestamp");
-      Comment newComment = new Comment(comment, timestamp);
-      comments.add(newComment);
-    }
-    
+    List<Comment> comments = commentsDatastore.fetchComments(maxNumOfComments);
+
     CommentsApiResponse commentsData =
-      new CommentsApiResponse(maxNumOfComments, comments);
+        new CommentsApiResponse(maxNumOfComments, comments);
 
     Gson gson = new Gson();
     String json = gson.toJson(commentsData);
+
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
@@ -85,26 +66,19 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter("comment");
-    long timestamp = System.currentTimeMillis();
     String maxNum = request.getParameter("number-of-comments");
+
     if (maxNum != null) {
       maxNumOfComments = Integer.parseInt(maxNum);
     }
-    if (comment != null && !comment.isEmpty()) {
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("comment", comment);
-      commentEntity.setProperty("timestamp", timestamp);
+    
+    Comment newComment = commentsDatastore.addComment(comment, maxNumOfComments);
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(commentEntity);
-
-    }
-
-    Comment newComment = new Comment(comment, timestamp);
     Gson gson = new Gson();
     String json = gson.toJson(newComment);
+
     response.setContentType("application/json;");
-    response.getWriter().println(comment);
+    response.getWriter().println(json);
     response.sendRedirect("/comments.html");
   }
 
