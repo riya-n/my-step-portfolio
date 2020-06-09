@@ -22,16 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.google.gson.Gson;
 import static com.google.sps.servlets.Constants.DEFAULT_COMMENTS_DISPLAYED;
-import com.google.sps.servlets.CommentsDatastore.Comment;
+import static com.google.sps.servlets.CommentsDatastore.*;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
-public class CommentsServlet extends HttpServlet {
+public final class CommentsServlet extends HttpServlet {
 
   private int maxNumOfComments;
-  private CommentsDatastore commentsDatastore;
 
-  public class CommentsApiResponse {
+  /** Class that creates an object to hold the comments
+  and limit on the number of comments displayed. */
+  public final class CommentsApiResponse {
     private int maxNumOfComments;
     private List<Comment> comments;
 
@@ -45,13 +46,12 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void init() {
     maxNumOfComments = DEFAULT_COMMENTS_DISPLAYED;
-    commentsDatastore = new CommentsDatastore();
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    List<Comment> comments = commentsDatastore.fetchComments(maxNumOfComments);
+    List<Comment> comments = fetchComments(maxNumOfComments);
 
     CommentsApiResponse commentsData =
         new CommentsApiResponse(maxNumOfComments, comments);
@@ -70,15 +70,14 @@ public class CommentsServlet extends HttpServlet {
 
     if (maxNum != null) {
       maxNumOfComments = Integer.parseInt(maxNum);
+    } else {
+
+      try {
+        addComment(comment);
+      } catch (IllegalArgumentException e) {}
+
     }
     
-    Comment newComment = commentsDatastore.addComment(comment, maxNumOfComments);
-
-    Gson gson = new Gson();
-    String json = gson.toJson(newComment);
-
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
     response.sendRedirect("/comments.html");
   }
 

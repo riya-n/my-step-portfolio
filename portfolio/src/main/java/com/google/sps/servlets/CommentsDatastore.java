@@ -10,22 +10,34 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.common.collect.ImmutableList; 
 
-public class CommentsDatastore {
+/** Class that handles writing/reading data from the datastore. */
+public final class CommentsDatastore {
 
-  public class Comment {
-    private String comment;
-    private long timestamp;
+  /** Class to create Comment object. */
+  public final static class Comment {
+    private final String comment;
+    private final long timestamp;
 
     public Comment(String comment, long timestamp) {
       this.comment = comment;
       this.timestamp = timestamp;
     }
-  } 
 
-    public CommentsDatastore() {}
+    /** Returns comment. */
+    public String getComment() {
+        return this.comment;
+    }
+
+    /** Returns timestamp of when comment was created. */
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+  } 
     
-    public List<Comment> fetchComments(int maxNumOfComments) {
+    /** Method that retreives comments from the datastore and formats it. */
+    public static List<Comment> fetchComments(int maxNumOfComments) {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       List<Entity> results = datastore.prepare(query)
@@ -39,27 +51,30 @@ public class CommentsDatastore {
         comments.add(newComment);
       }
 
-      return comments;
+      ImmutableList<Comment> immutComments =
+        ImmutableList.<Comment>builder().addAll(comments).build(); 
+
+      return immutComments;
     }
 
-    public Comment addComment(String comment, int maxNumOfComments) {
+    /** Method that adds a comment to the datastore. */
+    public static void addComment(String comment) {
+      if (comment.isEmpty()) {
+        throw new IllegalArgumentException();
+      }
+      
       long timestamp = System.currentTimeMillis();
 
-      if (comment != null && !comment.isEmpty()) {
-        Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("comment", comment);
-        commentEntity.setProperty("timestamp", timestamp);
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("comment", comment);
+      commentEntity.setProperty("timestamp", timestamp);
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(commentEntity);
-      }
-
-      Comment newComment = new Comment(comment, timestamp);
-
-      return newComment;
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
     }
 
-    public void deleteComments() {
+    /** Method that deletes all the comments currently in the datastore. */
+    public static void deleteComments() {
       Query query = new Query("Comment");
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
