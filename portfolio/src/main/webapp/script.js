@@ -50,31 +50,44 @@ function getRandomItem(curr, arr) {
     return item;
 }
 
+function onChangeSelect() {
+    const commentsLimit = document.getElementById("number-of-comments").value;
+    window.localStorage.setItem('commentsLimit', commentsLimit);
+    getComments();
+}
+
 function getComments() {
-  fetch('/comments').then(response => response.text()).then((data) => {
-    const dataJson = JSON.parse(data);
-    const comments = dataJson.comments;
-    const maxNum = dataJson.maxNumOfComments;
 
-    comments.forEach(({comment}) => {
-      var element = document.createElement("li");
-      const text = document.createTextNode(comment);
-      element.appendChild(text);
-      document.getElementById("comments-container").appendChild(element);
-    });
+    const commentsLimit = window.localStorage.getItem("commentsLimit");
 
-    if (comments.length == 0) {
-        document.getElementById("comments-container").innerText = "";
+    if (commentsLimit === null) {
+        onChangeSelect();
+    } else {
+      document.getElementById("number-of-comments").value = commentsLimit;
+
+      fetch('/comments?commentsLimit=' + commentsLimit)
+        .then(response => response.text()).then((data) => {
+        console.log('on fetch', data);
+        const dataJson = JSON.parse(data);
+        const comments = dataJson.comments;
+
+        document.getElementById("comments-container").innerHTML = '';
+
+        comments.forEach(({comment}) => {
+          var element = document.createElement("li");
+          const text = document.createTextNode(comment);
+          element.appendChild(text);
+          document.getElementById("comments-container").appendChild(element);
+        });
+
+      });
     }
-
-    document.getElementById('number-of-comments').value = maxNum;
-  });
 }
 
 function deleteComments() {
     fetch('/delete-comments', {method: 'POST'})
       .then(response => response.text()).then((data) => {
-        console.log(data);
-        getComments();
+      console.log('after delete', data);
+      getComments();
     })
 }

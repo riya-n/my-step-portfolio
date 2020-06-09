@@ -1,4 +1,4 @@
-package com.google.sps.servlets;
+package com.google.sps.data;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -37,11 +37,11 @@ public final class CommentsDatastore {
   } 
     
     /** Method that retreives comments from the datastore and formats it. */
-    public static List<Comment> fetchComments(int maxNumOfComments) {
+    public static List<Comment> fetchComments(int commentsLimit) {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       List<Entity> results = datastore.prepare(query)
-        .asList(FetchOptions.Builder.withLimit(maxNumOfComments));
+        .asList(FetchOptions.Builder.withLimit(commentsLimit));
       
       List<Comment> comments = new ArrayList<>();
       for (Entity entity : results) {

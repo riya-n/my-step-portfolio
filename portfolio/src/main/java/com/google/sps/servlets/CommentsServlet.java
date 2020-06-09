@@ -21,40 +21,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.google.gson.Gson;
-import static com.google.sps.servlets.Constants.DEFAULT_COMMENTS_DISPLAYED;
-import static com.google.sps.servlets.CommentsDatastore.*;
+import static com.google.sps.data.CommentsDatastore.*;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
 public final class CommentsServlet extends HttpServlet {
 
-  private int maxNumOfComments;
-
   /** Class that creates an object to hold the comments
   and limit on the number of comments displayed. */
   public final class CommentsApiResponse {
-    private int maxNumOfComments;
     private List<Comment> comments;
 
-    public CommentsApiResponse(int maxNumOfComments,
-      List<Comment> comments) {
-      this.maxNumOfComments = maxNumOfComments;
+    public CommentsApiResponse(List<Comment> comments) {
       this.comments = comments;
+    }
+
+    /** Returns list of comments. */
+    public List<Comment> getComments() {
+      return this.comments;
     }
   }
 
   @Override
-  public void init() {
-    maxNumOfComments = DEFAULT_COMMENTS_DISPLAYED;
-  }
-
-  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Integer commentsLimit = Integer.parseInt(request.getParameter("commentsLimit"));
 
-    List<Comment> comments = fetchComments(maxNumOfComments);
+    List<Comment> comments = fetchComments(commentsLimit);
 
     CommentsApiResponse commentsData =
-        new CommentsApiResponse(maxNumOfComments, comments);
+        new CommentsApiResponse(comments);
 
     Gson gson = new Gson();
     String json = gson.toJson(commentsData);
@@ -66,18 +61,11 @@ public final class CommentsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter("comment");
-    String maxNum = request.getParameter("number-of-comments");
 
-    if (maxNum != null) {
-      maxNumOfComments = Integer.parseInt(maxNum);
-    } else {
+    try {
+      addComment(comment);
+    } catch (IllegalArgumentException e) {}
 
-      try {
-        addComment(comment);
-      } catch (IllegalArgumentException e) {}
-
-    }
-    
     response.sendRedirect("/comments.html");
   }
 
