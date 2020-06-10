@@ -1,3 +1,8 @@
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+   String uploadUrl = blobstoreService.createUploadUrl("/upload-image"); %>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,12 +20,22 @@
           <a href="/index.html">Home</a>
           <a href="/projects.html">Projects</a>
           <a href="/gallery.html">Gallery</a>
-          <a class="active" href="/comments.html">Comments</a>
+          <a class="active" href="/comments.jsp">Comments</a>
         </span>
       </div>
       <div id="content-container">
         <h1>Leave a comment below!</h1>
         <div class="info-container">
+
+
+          <form action="<%= uploadUrl %>" id="image-upload-form"
+            method="POST" enctype="multipart/form-data">
+            <p>Upload an image:</p>
+            <input type="file" name="uploaded-image">
+            <input type="submit" value="Submit" id="submit-image"/>
+          </form>
+
+
           <form action="/comments" method="POST" onsubmit="return checkForm()">
             <input type="text" name="comment"
               placeholder="Write something here..." id="comments-box">

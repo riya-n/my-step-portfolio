@@ -29,10 +29,56 @@
       <artifactId>appengine-api-1.0-sdk</artifactId>
       <version>1.9.59</version>
     </dependency>
+
+
+
+<!-- 
+    <dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version>
+</dependency>
+
+<dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+  <version>9.4.27.v20200227</version>
+    </dependency> -->
+
+    <!-- <dependency>
+  <groupId>javax.activation</groupId>
+  <artifactId>javax.activation-api</artifactId>
+  <version>1.2.0</version>
+</dependency>
+
+<dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version>
+</dependency>
+
+<dependency>
+    <groupId>com.sun.activation</groupId>
+    <artifactId>javax.activation</artifactId>
+    <version>1.2.0</version>
+</dependency> -->
+
   </dependencies>
 
   <build>
     <plugins>
+
+
+    <!-- <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.3</version>
+            <configuration>
+                <archiveClasses>true</archiveClasses>
+            </configuration>
+        </plugin> -->
+
+
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
@@ -42,6 +88,10 @@
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
+
+
+
+
     </plugins>
   </build>
 </project>

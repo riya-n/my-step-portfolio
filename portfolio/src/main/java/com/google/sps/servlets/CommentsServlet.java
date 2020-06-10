@@ -70,7 +70,7 @@ public final class CommentsServlet extends HttpServlet {
       return;
     }
 
-    response.sendRedirect("/comments.html");
+    response.sendRedirect("/comments.jsp");
   }
 
 }
