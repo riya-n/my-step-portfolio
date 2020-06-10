@@ -142,7 +142,8 @@ a.repo:hover {
     margin-bottom: 20px;
 }
 
-#number-of-comments {
+select {
+  text-align-last: center;
   background-color: #f48b52;
   padding: 5px;
   border: none;
@@ -173,7 +174,7 @@ option {
   color: darkslategrey;
 }
 
-#submit-comment {
+.submit {
   width: -webkit-fill-available;
   border: none;
   background-color: #f48b52;
@@ -200,4 +201,11 @@ li {
   margin: 10px;
   padding: 10px;
   background-color: #a6ded2;
+}
+
+#chart-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: -webkit-fill-available;
+  height: 500px;
 }
