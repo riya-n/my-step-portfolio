@@ -2,7 +2,7 @@ package com.google.sps.data;
 
 import java.util.Map;
 import com.google.appengine.api.datastore.*;
-import com.google.common.collect.ImmutableMap; 
+import com.google.common.collect.ImmutableMap;
 
 /** Class that handles writing/reading cuisine data from the datastore. */
 public final class CuisineDatastore {
@@ -30,22 +30,22 @@ public final class CuisineDatastore {
         throw new IllegalArgumentException("Cuisine should not be empty or null");
       }
 
-      // TODO: filter directly by property
-      Query query = new Query("Cuisine");
+      Query.Filter filter = new Query.FilterPredicate("cuisine",
+        Query.FilterOperator.EQUAL, cuisine);
+      Query query = new Query("Cuisine").setFilter(filter);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
-      boolean bool = false;
+
+      boolean updated = false;
+
       for (Entity entity : results.asIterable()) {
-        if (entity.getProperty("cuisine").equals(cuisine)) {
-          bool = true;
-          Integer votes = ((Long) entity.getProperty("votes")).intValue();
-          entity.setProperty("votes", votes + 1);
-          datastore.put(entity);
-          break;
-        }
+        Integer votes = ((Long) entity.getProperty("votes")).intValue();
+        entity.setProperty("votes", votes + 1);
+        datastore.put(entity);
+        updated = true;
       }
 
-      if (!bool) {
+      if (!updated) {
         Entity cuisineEntity = new Entity("Cuisine");
         cuisineEntity.setProperty("cuisine", cuisine);
         cuisineEntity.setProperty("votes", 1);
