@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Riya's Comments</title>
+    <link rel="shortcut icon" type="image/png" href="/images/icon.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body onload="getComments()">
+    <div id="content">
+      <div class="bar" id="top-bar">
+        <span id="name-container">Riya Narayan</span>
+        <span id="navbar-container">
+          <a href="/index.html">Home</a>
+          <a href="/projects.html">Projects</a>
+          <a href="/gallery.html">Gallery</a>
+          <a class="active" href="/comments.html">Comments</a>
+        </span>
+      </div>
+      <div id="content-container">
+        <h1>Leave a comment below!</h1>
+        <div class="info-container">
+          <form action="/comments" method="POST" onsubmit="return checkForm()">
+            <input type="text" name="comment"
+              placeholder="Write something here..." id="comments-box">
+            <input type="submit" value="Submit" id="submit-comment"/>
+          </form>
+          <div class="info">
+            <select name="number-of-comments" id="number-of-comments"
+              onchange="onChangeSelect()">
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
+            <label for="number-of-comments" id="number-of-comments-label">
+              (Maximum number of comments displayed)</label>
+            <span onclick="deleteComments()" class="span-button" id="delete-comments">
+              Delete All Comments</span>
+            <br>
+          </div>
+          <ul class="info" id="comments-container"></ul>
+        </div>
+      </div>
+      <div class="bar" id="bottom-bar">
+        <span>
+          <a href="https://www.linkedin.com/in/riya-narayan/" target="_blank">LinkedIn</a>
+          <a href="https://github.com/riya-n" target="_blank">GitHub</a>
+        </span>
+      </div>
+    </div>
+  </body>
+</html>
