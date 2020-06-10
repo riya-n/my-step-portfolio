@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.google.gson.Gson;
-import static com.google.sps.data.CommentsDatastore.*;
+import com.google.sps.data.CommentsDatastore;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
@@ -30,14 +30,14 @@ public final class CommentsServlet extends HttpServlet {
   /** Class that creates an object to hold the comments
   and limit on the number of comments displayed. */
   public final class CommentsApiResponse {
-    private List<Comment> comments;
+    private List<CommentsDatastore.Comment> comments;
 
-    public CommentsApiResponse(List<Comment> comments) {
+    public CommentsApiResponse(List<CommentsDatastore.Comment> comments) {
       this.comments = comments;
     }
 
     /** Returns list of comments. */
-    public List<Comment> getComments() {
+    public List<CommentsDatastore.Comment> getComments() {
       return this.comments;
     }
   }
@@ -46,7 +46,7 @@ public final class CommentsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Integer commentsLimit = Integer.parseInt(request.getParameter("commentsLimit"));
 
-    List<Comment> comments = fetchComments(commentsLimit);
+    List<CommentsDatastore.Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
 
     CommentsApiResponse commentsData =
         new CommentsApiResponse(comments);
@@ -63,8 +63,11 @@ public final class CommentsServlet extends HttpServlet {
     String comment = request.getParameter("comment");
 
     try {
-      addComment(comment);
-    } catch (IllegalArgumentException e) {}
+      CommentsDatastore.addComment(comment);
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+      response.setStatus(400);
+    }
 
     response.sendRedirect("/comments.html");
   }

@@ -43,7 +43,7 @@ public final class CommentsDatastore {
       List<Entity> results = datastore.prepare(query)
         .asList(FetchOptions.Builder.withLimit(commentsLimit));
       
-      List<Comment> comments = new ArrayList<>();
+      ImmutableList.Builder<Comment> comments = ImmutableList.builder();
       for (Entity entity : results) {
         String comment = (String) entity.getProperty("comment");
         long timestamp = (long) entity.getProperty("timestamp");
@@ -51,16 +51,14 @@ public final class CommentsDatastore {
         comments.add(newComment);
       }
 
-      ImmutableList<Comment> immutComments =
-        ImmutableList.<Comment>builder().addAll(comments).build(); 
-
-      return immutComments;
+      return comments.build();
     }
 
-    /** Method that adds a comment to the datastore. */
+    /** Method that adds a comment to the datastore.
+    Method throws {@link IllegalArgumentException} if the comment is empty */
     public static void addComment(String comment) {
       if (comment.isEmpty()) {
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Comment should not be empty");
       }
       
       long timestamp = System.currentTimeMillis();
@@ -71,6 +69,7 @@ public final class CommentsDatastore {
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
+      
     }
 
     /** Method that deletes all the comments currently in the datastore. */
