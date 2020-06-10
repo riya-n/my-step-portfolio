@@ -21,7 +21,7 @@
       <div id="content-container">
         <h1>Leave a comment below!</h1>
         <div class="info-container">
-          <form action="/comments" method="POST">
+          <form action="/comments" method="POST" onsubmit="return checkForm()">
             <input type="text" name="comment"
               placeholder="Write something here..." id="comments-box">
             <input type="submit" value="Submit" id="submit-comment"/>

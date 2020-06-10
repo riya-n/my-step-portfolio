@@ -67,6 +67,7 @@ public final class CommentsServlet extends HttpServlet {
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
       response.setStatus(400);
+      return;
     }
 
     response.sendRedirect("/comments.html");

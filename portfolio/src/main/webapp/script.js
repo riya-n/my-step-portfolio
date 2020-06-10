@@ -58,6 +58,16 @@ function getRandomItem(curr, arr) {
 }
 
 /**
+ * Validates that the comment is not empty before making POST request.
+ */
+function checkForm() {
+  const comment = document.getElementById("comments-box").value;
+  if (comment === "") {
+    return false;
+  }
+}
+
+/**
  * Adds the selected commentsLimit to the localStorage
  * and then reloads the page.
  */
