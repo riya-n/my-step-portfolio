@@ -4,6 +4,7 @@ import java.util.List;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.common.collect.ImmutableList; 
+import com.google.sps.data.Constants;
 
 /** Class that handles writing/reading data from the datastore. */
 public final class CommentsDatastore {
@@ -31,15 +32,16 @@ public final class CommentsDatastore {
     
     /** Method that retreives comments from the datastore and formats it. */
     public static List<Comment> fetchComments(int commentsLimit) {
-      Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+      Query query = new Query(Constants.COMMENT_ENTITY)
+        .addSort(Constants.TIMESTAMP_PARAMETER, SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       List<Entity> results = datastore.prepare(query)
         .asList(FetchOptions.Builder.withLimit(commentsLimit));
       
       ImmutableList.Builder<Comment> comments = ImmutableList.builder();
       for (Entity entity : results) {
-        String comment = (String) entity.getProperty("comment");
-        long timestamp = (long) entity.getProperty("timestamp");
+        String comment = (String) entity.getProperty(Constants.COMMENT_PARAMETER);
+        long timestamp = (long) entity.getProperty(Constants.TIMESTAMP_PARAMETER);
         Comment newComment = new Comment(comment, timestamp);
         comments.add(newComment);
       }
@@ -51,14 +53,14 @@ public final class CommentsDatastore {
     Method throws {@link IllegalArgumentException} if the comment is empty */
     public static void addComment(String comment) {
       if (comment.isEmpty()) {
-        throw new IllegalArgumentException("Comment should not be empty");
+        throw new IllegalArgumentException(Constants.COMMENT_EMPTY_ERROR);
       }
       
       long timestamp = System.currentTimeMillis();
 
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("comment", comment);
-      commentEntity.setProperty("timestamp", timestamp);
+      Entity commentEntity = new Entity(Constants.COMMENT_ENTITY);
+      commentEntity.setProperty(Constants.COMMENT_PARAMETER, comment);
+      commentEntity.setProperty(Constants.TIMESTAMP_PARAMETER, timestamp);
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);

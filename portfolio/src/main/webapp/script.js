@@ -137,7 +137,7 @@ function drawChart() {
   fetch('cuisine-data').then(response => response.json())
     .then((cuisineVotes) => {
         
-      var data = new google.visualization.DataTable();
+      let data = new google.visualization.DataTable();
       data.addColumn('string','Cuisine');
       data.addColumn('number','Votes');
       Object.keys(cuisineVotes).forEach((cuisine) => {

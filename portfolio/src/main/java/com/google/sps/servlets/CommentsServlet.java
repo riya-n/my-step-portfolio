@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.sps.data.CommentsDatastore;
+import com.google.sps.data.Constants;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
@@ -44,7 +45,7 @@ public final class CommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Integer commentsLimit = Integer.parseInt(request.getParameter("commentsLimit"));
+    Integer commentsLimit = Integer.parseInt(request.getParameter(Constants.COMMENTS_LIMIT_PARAMETER));
 
     List<CommentsDatastore.Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
 
@@ -60,7 +61,7 @@ public final class CommentsServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter("comment");
+    String comment = request.getParameter(Constants.COMMENT_PARAMETER);
 
     try {
       CommentsDatastore.addComment(comment);
