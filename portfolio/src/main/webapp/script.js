@@ -128,32 +128,3 @@ function deleteComments() {
       getComments();
     })
 }
-
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
-
-/** Creates the pie chart and adds it to the page. */
-function drawChart() {
-  fetch('cuisine-data').then(response => response.json())
-    .then((cuisineVotes) => {
-        
-      let data = new google.visualization.DataTable();
-      data.addColumn('string','Cuisine');
-      data.addColumn('number','Votes');
-      Object.keys(cuisineVotes).forEach((cuisine) => {
-        data.addRow([cuisine, cuisineVotes[cuisine]]);
-      });
-    
-    const options = {
-      pieHole: 0.4,
-      pieSliceTextStyle: {
-        color: '#f5f6fa'
-      },
-      backgroundColor: '#a6ded2',
-      legend: 'none'
-    };
-
-    const chart = new google.visualization.PieChart(document.getElementById('chart-container'));
-    chart.draw(data, options);
-  })
-}

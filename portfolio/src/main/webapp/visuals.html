@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Cool Visuals</title>
     <link rel="shortcut icon" type="image/png" href="/images/icon.png">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwbt3g_2O9duY7lPsB3RrkbUC87QKAc0"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="visuals.js"></script>
   </head>
-  <body>
+  <body onload="createMap();">
     <div id="content">
       <div class="bar" id="top-bar">
         <span id="name-container">Riya Narayan</span>
@@ -44,6 +45,15 @@
               </select>
               <input type="submit" value="Submit" class="submit" style="background-color: darkslategrey;"/>
             </form>
+          </div>
+          <div class="info">
+            <div class="project-name">Favorite Restaurants in Singapore</div>
+            <div class="project-description" style="margin-bottom: 10px;">
+              Click 
+              <span onclick="showRestaurantMarkers()" class="span-button">here</span> 
+              to check out some of my favorite restaurants.
+            </div>
+            <div id="map-container"></div>
           </div>
         </div>
       </div>

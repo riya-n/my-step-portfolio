@@ -209,3 +209,9 @@ li {
   width: -webkit-fill-available;
   height: 500px;
 }
+
+#map-container {
+  border: thin solid black;
+  height: 500px;
+  width: -webkit-fill-available;
+}
