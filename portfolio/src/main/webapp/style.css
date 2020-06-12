@@ -49,6 +49,12 @@ a.repo {
   color: #f48b52;
 }
 
+a.dataset {
+  color: darkslategrey;
+  margin: 0px;
+  text-decoration: underline;
+}
+
 .active {
   color: darkslategrey;
 }
@@ -59,6 +65,10 @@ a:hover {
 
 a.repo:hover {
   color: #f5f6fa;
+}
+
+a.dataset:hover {
+  color: #f48b52;
 }
 
 #profile-picture {

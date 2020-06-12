@@ -28,54 +28,50 @@ function drawChart() {
 }
 
 let map;
+let courtsInfo;
 
 /** Creates a map and adds it to the page. */
 function createMap() {
-  map = new google.maps.Map(document.getElementById('map-container'), {
-    center: { lat: 1.3521, lng: 103.8198 },
-    zoom: 11,
-    styles: style
+  fetch('/basketball-courts').then(response => response.json()).then((courts) => {
+    map = new google.maps.Map(document.getElementById('map-container'), {
+      center: { lat: 40.7128, lng: -74.0060 },
+      zoom: 10,
+      styles: style
+    });
+
+    courtsInfo = courts;
   });
 }
 
-let restuarantMarkers = [];
+let courtsMarkers = [];
 
-/** add markers for restaurants */
-function showRestaurantMarkers() {
-  clearRestaurantMarkers();
-  for (var i = 0; i < restaurantInfo.length; i++) {
-    addMarkerWithTimeout(restaurantInfo[i].name,
-    restaurantInfo[i].location, i * 200);
+/** add markers for courts */
+function showCourtsMarkers() {
+  clearCourtsMarkers();
+  for (let i = 0; i < courtsInfo.length; i++) {
+    addMarkerWithTimeout(courtsInfo[i], i * 200);
   }
 }
 
 /** drop the markers so that the user can see them falling */
-function addMarkerWithTimeout(name, location, timeout) {
+function addMarkerWithTimeout(court, timeout) {
   window.setTimeout(function() {
-    restuarantMarkers.push(new google.maps.Marker({
-      position: location,
+    courtsMarkers.push(new google.maps.Marker({
+      position: { lat: parseFloat(court.lat), lng: parseFloat(court.lon) },
       map: map,
       animation: google.maps.Animation.DROP,
-      title: name
+      title: court.Name
     }));
   }, timeout);
 }
 
 /** clear the markers (so they can be dropped again) */
-function clearRestaurantMarkers() {
-  for (var i = 0; i < restuarantMarkers.length; i++) {
-    restuarantMarkers[i].setMap(null);
+function clearCourtsMarkers() {
+  for (let i = 0; i < courtsMarkers.length; i++) {
+    courtsMarkers[i].setMap(null);
   }
-  restuarantMarkers = [];
+  courtsMarkers = [];
 }
-
-/** name and location of the restuarant for the map markers */
-const restaurantInfo = [
-  {
-    name: 'Nakhon Kitchen',
-    location: { lat: 1.3104, lng: 103.7948 }
-  }
-]
 
 /** map styling */
 const style = [

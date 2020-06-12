@@ -18,8 +18,13 @@ public final class Constants {
   public static String VOTES_PARAMETER = "votes";
   public static String CUISINE_EMPTY_ERROR = "Cuisine should not be empty";
 
+  /** basketball court related */
+  public static String JSON_FILE_PATH = "///home/riyanar/step/portfolio/src/main/webapp/WEB-INF/basketball-courts-nyc.json";
+  public static String ACCESSIBLE_PROPERTY = "Accessible";
+  public static String IS_ACCESSIBLE = "Y";
+  public static String FILE_NOT_FOUND = "Basketall courts json file not found";
+
   /** generic errors */
   public static String DOPOST_ILL_ARG_ERROR = "Illegal Argument Exception caught in doPost method";
-
-  
+ 
 }
