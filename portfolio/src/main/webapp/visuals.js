@@ -39,13 +39,11 @@ function createMap() {
       styles: style
     });
 
-    console.log(courts);
     courtsInfo = courts;
   });
 }
 
 let courtsMarkers = [];
-// let numCourtsMarkers = [];
 
 /** add markers for courts */
 function showCourtsMarkers() {
@@ -57,8 +55,9 @@ function showCourtsMarkers() {
 
 /**
  * Drops the markers so that the user can see them falling.
- * The pins indicate the location of the courts, and the 
- * circles indicate the number of courts (if the property is given).
+ * The pins indicate the location of the courts. You can also
+ * click on them to get information about the name and address.
+ * The circles indicate the number of courts (if the property is given).
  * Also, the radius of the circle is an indication of the number of courts.
  */
 function addMarkerWithTimeout(court, timeout) {
@@ -68,6 +67,11 @@ function addMarkerWithTimeout(court, timeout) {
       map: map,
       animation: google.maps.Animation.DROP,
       title: court.Name
+    }).addListener('click', function() {
+        new google.maps.InfoWindow({
+          content: '<div style="font-weight:bold;">' + court.Name +
+            '</div><div style="font-style:italic;">' + court.Location + '</div>'
+        }).open(map, this);
     }));
     if (court.hasOwnProperty('Num_of_Courts')) {
       let location = new google.maps.LatLng(parseFloat(court.lat), parseFloat(court.lon));
