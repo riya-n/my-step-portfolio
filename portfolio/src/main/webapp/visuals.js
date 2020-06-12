@@ -39,11 +39,13 @@ function createMap() {
       styles: style
     });
 
+    console.log(courts);
     courtsInfo = courts;
   });
 }
 
 let courtsMarkers = [];
+// let numCourtsMarkers = [];
 
 /** add markers for courts */
 function showCourtsMarkers() {
@@ -53,7 +55,12 @@ function showCourtsMarkers() {
   }
 }
 
-/** drop the markers so that the user can see them falling */
+/**
+ * Drops the markers so that the user can see them falling.
+ * The pins indicate the location of the courts, and the 
+ * circles indicate the number of courts (if the property is given).
+ * Also, the radius of the circle is an indication of the number of courts.
+ */
 function addMarkerWithTimeout(court, timeout) {
   window.setTimeout(function() {
     courtsMarkers.push(new google.maps.Marker({
@@ -62,6 +69,19 @@ function addMarkerWithTimeout(court, timeout) {
       animation: google.maps.Animation.DROP,
       title: court.Name
     }));
+    if (court.hasOwnProperty('Num_of_Courts')) {
+      let location = new google.maps.LatLng(parseFloat(court.lat), parseFloat(court.lon));
+      courtsMarkers.push(new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: location,
+        radius: parseInt(court.Num_of_Courts) * 1000
+      }));
+    }
   }, timeout);
 }
 
