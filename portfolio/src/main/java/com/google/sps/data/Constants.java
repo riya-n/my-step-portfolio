@@ -6,25 +6,24 @@ public final class Constants {
   private Constants() {}
 
   /** comments related */
-  public static String COMMENT_ENTITY = "Comment";
-  public static String COMMENT_PARAMETER = "comment";
-  public static String TIMESTAMP_PARAMETER = "timestamp";
-  public static String COMMENTS_LIMIT_PARAMETER = "commentsLimit";
-  public static String COMMENT_EMPTY_ERROR = "Comment should not be empty";
+  public static final String COMMENT_ENTITY = "Comment";
+  public static final String COMMENT_PARAMETER = "comment";
+  public static final String TIMESTAMP_PARAMETER = "timestamp";
+  public static final String COMMENTS_LIMIT_PARAMETER = "commentsLimit";
   
   /** cuisine related */
-  public static String CUISINE_ENTITY = "CuisineVotes";
-  public static String CUISINE_PARAMETER = "cuisine";
-  public static String USERID_PARAMETER = "userId";
-  public static String CUISINE_EMPTY_ERROR = "Cuisine should not be empty";
+  public static final String CUISINE_ENTITY = "CuisineVotes";
+  public static final String CUISINE_PARAMETER = "cuisine";
+  public static final String USERID_PARAMETER = "userId";
 
   /** basketball court related */
-  public static String JSON_FILE_PATH = "///home/riyanar/step/portfolio/src/main/webapp/WEB-INF/basketball-courts-nyc.json";
-  public static String ACCESSIBLE_PROPERTY = "Accessible";
-  public static String IS_ACCESSIBLE = "Y";
-  public static String FILE_NOT_FOUND = "Basketall courts json file not found";
-
-  /** generic errors */
-  public static String DOPOST_ILL_ARG_ERROR = "Illegal Argument Exception caught in doPost method";
+  public static final String JSON_FILE_PATH = "///home/riyanar/step/portfolio/src/main/webapp/WEB-INF/basketball-courts-nyc.json";
+  public static final String ACCESSIBLE_PROPERTY = "Accessible";
+  public static final String IS_ACCESSIBLE = "Y";
+  public static final String NAME_PROPERTY = "Name";
+  public static final String LOCATION_PROPERTY = "Location";
+  public static final String NUMCOURTS_PROPERTY = "Num_of_Courts";
+  public static final String LAT_PROPERTY = "lat";
+  public static final String LON_PROPERTY = "lon";
  
 }

@@ -34,10 +34,10 @@ public final class CuisineDatastore {
     }
 
     /** Method that updates the cuisine vote in the datastore.
-    Method throws {@link IllegalArgumentException} if the cuisine or userId is empty or null */
+    Method throws {@link IllegalArgumentException} if the cuisine or userId is empty */
     public static void addCuisineVote(String userId, String cuisine) {
       if (cuisine.isEmpty() || userId.isEmpty()) {
-        throw new IllegalArgumentException(Constants.CUISINE_EMPTY_ERROR);
+        throw new IllegalArgumentException("cuisine and userId should not be empty.");
       }
 
       Query.Filter filter = new Query.FilterPredicate(Constants.USERID_PARAMETER,

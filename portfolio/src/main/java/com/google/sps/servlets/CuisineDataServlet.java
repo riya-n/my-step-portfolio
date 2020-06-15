@@ -1,10 +1,7 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
 import java.io.IOException;
-import java.io.BufferedReader;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +11,6 @@ import com.google.sps.data.CuisineDatastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.sps.data.Constants;
-import java.util.stream.Collectors;
 
 @WebServlet("/cuisine-data")
 public final class CuisineDataServlet extends HttpServlet {
@@ -52,17 +48,20 @@ public final class CuisineDataServlet extends HttpServlet {
     CuisineVote cuisineVote = new Gson().fromJson(request.getReader(), CuisineVote.class);
 
     if (cuisineVote == null) {
-      throw new IllegalArgumentException("cuisine vote shouldn't be null");
+      log.error("cuisine vote should not be null");
+      response.setStatus(400);
+      return;
     }
 
     String userId = cuisineVote.getUserId();
     String cuisine = cuisineVote.getCuisine();
+    cuisine = cuisine.trim().toLowerCase();
 
     try {
-      CuisineDatastore.addCuisineVote(userId, cuisine.toLowerCase());
+      CuisineDatastore.addCuisineVote(userId, cuisine);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
-      log.error(Constants.DOPOST_ILL_ARG_ERROR);
+      log.error("cuisine and userId should not be empty.");
       response.setStatus(400);
       return;
     }

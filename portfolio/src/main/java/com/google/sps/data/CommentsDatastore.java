@@ -53,7 +53,7 @@ public final class CommentsDatastore {
     Method throws {@link IllegalArgumentException} if the comment is empty */
     public static void addComment(String comment) {
       if (comment.isEmpty()) {
-        throw new IllegalArgumentException(Constants.COMMENT_EMPTY_ERROR);
+        throw new IllegalArgumentException("comment should not be empty");
       }
       
       long timestamp = System.currentTimeMillis();

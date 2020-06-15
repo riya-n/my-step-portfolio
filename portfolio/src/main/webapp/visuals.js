@@ -1,9 +1,13 @@
+let map;
+let courtsInfo;
+let courtsMarkers = [];
+
 google.charts.load('current', { 'packages': ['corechart'] });
 google.charts.setOnLoadCallback(drawChart);
 
 /** Creates the pie chart and adds it to the page. */
 function drawChart() {
-  fetch('cuisine-data').then(response => response.json())
+  fetch('/cuisine-data').then(response => response.json())
     .then((cuisineVotes) => {
 
     let data = new google.visualization.DataTable();
@@ -47,7 +51,6 @@ function addCuisineVote() {
   if (selectVal !== "") {
     let userId = getCookie("userId");
     let cuisineVote = getCookie("cuisineVote");
-    console.log(document.cookie);
     if (cuisineVote !== selectVal) {
       if (userId === "") {
         userId = Date.now().toString();
@@ -55,7 +58,6 @@ function addCuisineVote() {
       }
       cuisineVote = selectVal;
       document.cookie = 'cuisineVote=' + selectVal;
-      console.log(document.cookie);
 
       let cuisineVoteJson = {
           'userId': userId,
@@ -88,9 +90,6 @@ function getCookie(name) {
   return "";
 }
 
-let map;
-let courtsInfo;
-
 /** Creates a map and adds it to the page. */
 function createMap() {
   fetch('/basketball-courts').then(response => response.json()).then((courts) => {
@@ -104,13 +103,17 @@ function createMap() {
   });
 }
 
-let courtsMarkers = [];
-
-/** add markers for courts */
+/**
+ * Add markers for courts.
+ * The "i * 200" essentially means that each marker will be placed 200ms
+ * after each other. It's a good value because it is short enough that the
+ * user won't be waiting too long for the pins to drop, but also long enough that
+ * the user can see the effect of the pins dropping individually.
+ */
 function showCourtsMarkers() {
   clearCourtsMarkers();
   for (let i = 0; i < courtsInfo.length; i++) {
-    addMarkerWithTimeout(courtsInfo[i], i * 200);
+    window.setTimeout(function() { addMarker(courtsInfo[i]) }, i * 200);
   }
 }
 
@@ -121,21 +124,23 @@ function showCourtsMarkers() {
  * The circles indicate the number of courts (if the property is given).
  * Also, the radius of the circle is an indication of the number of courts.
  */
-function addMarkerWithTimeout(court, timeout) {
-  window.setTimeout(function() {
-    courtsMarkers.push(new google.maps.Marker({
-      position: { lat: parseFloat(court.lat), lng: parseFloat(court.lon) },
+ function addMarker(court) {
+    let newMarker = new google.maps.Marker({
+      position: { lat: court.lat, lng: court.lon },
       map: map,
       animation: google.maps.Animation.DROP,
-      title: court.Name
-    }).addListener('click', function() {
+      title: court.name
+    });
+    courtsMarkers.push(newMarker);
+    newMarker.addListener('click', function() {
         new google.maps.InfoWindow({
-          content: '<div style="font-weight:bold;">' + court.Name +
-            '</div><div style="font-style:italic;">' + court.Location + '</div>'
+          content: '<div style="font-weight:bold;">' + court.name +
+            '</div><div style="font-style:italic;">' + court.location + '</div>'
         }).open(map, this);
-    }));
-    if (court.hasOwnProperty('Num_of_Courts')) {
-      let location = new google.maps.LatLng(parseFloat(court.lat), parseFloat(court.lon));
+    });
+
+    if (court.hasOwnProperty('numOfCourts')) {
+      let location = new google.maps.LatLng(court.lat, court.lon);
       courtsMarkers.push(new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
@@ -144,10 +149,9 @@ function addMarkerWithTimeout(court, timeout) {
         fillOpacity: 0.35,
         map: map,
         center: location,
-        radius: parseInt(court.Num_of_Courts) * 1000
+        radius: court.numOfCourts * 1000
       }));
     }
-  }, timeout);
 }
 
 /** clear the markers (so they can be dropped again) */
