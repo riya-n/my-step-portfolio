@@ -30,21 +30,20 @@
               Vote for your favorite cuisine from the below list of popular Asian cuisines!
             </div>
             <div id="chart-container"></div>
-            <form action="/cuisine-data" method="POST" onsubmit="return checkSelect()">
-              <select name="cuisine" id="cuisine-select" style="width: -webkit-fill-available;">
-                <option value="" disabled selected>Select Here</option>
-                <option value="Japanese">Japanese</option>
-                <option value="Indonesian">Indonesian</option>
-                <option value="Chinese">Chinese</option>
-                <option value="Indian">Indian</option>
-                <option value="Thai">Thai</option>
-                <option value="Korean">Korean</option>
-                <option value="Vietnamese">Vietnamese</option>
-                <option value="Malay">Malay</option>
-                <option value="Singaporean">Singaporean</option>
-              </select>
-              <input type="submit" value="Submit" class="submit" style="background-color: darkslategrey;"/>
-            </form>
+            <select name="cuisine" id="cuisine-select" style="width: -webkit-fill-available;">
+              <option value="" disabled selected>Select Here</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Indonesian">Indonesian</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Indian">Indian</option>
+              <option value="Thai">Thai</option>
+              <option value="Korean">Korean</option>
+              <option value="Vietnamese">Vietnamese</option>
+              <option value="Malay">Malay</option>
+              <option value="Singaporean">Singaporean</option>
+            </select>
+            <button onclick="addCuisineVote()" class="submit" style="background-color: darkslategrey;">
+              Submit</button>
           </div>
           <div class="info">
             <div class="project-name">Basketball Courts in New York City</div>

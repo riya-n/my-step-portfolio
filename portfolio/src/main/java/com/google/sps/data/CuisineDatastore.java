@@ -1,6 +1,7 @@
 package com.google.sps.data;
 
 import java.util.Map;
+import java.util.HashMap;
 import com.google.appengine.api.datastore.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Constants;
@@ -14,25 +15,33 @@ public final class CuisineDatastore {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       
-      ImmutableMap.Builder<String, Integer> cuisineVotes = ImmutableMap.builder();
+      Map<String, Integer> cuisineVotes = new HashMap<>();
+
       for (Entity entity : results.asIterable()) {
         String cuisine = (String) entity.getProperty(Constants.CUISINE_PARAMETER);
-        Long votes = (Long) entity.getProperty(Constants.VOTES_PARAMETER);
-        cuisineVotes.put(cuisine, votes.intValue());
+        Integer votes = cuisineVotes.get(cuisine);
+        if (votes == null) {
+          cuisineVotes.put(cuisine, 1);
+        } else {
+          cuisineVotes.replace(cuisine, votes + 1);
+        }
       }
 
-      return cuisineVotes.build();
+      ImmutableMap<String, Integer> immuMap =  ImmutableMap.<String, Integer>builder()
+        .putAll(cuisineVotes).build(); 
+
+      return immuMap;
     }
 
     /** Method that updates the cuisine vote in the datastore.
-    Method throws {@link IllegalArgumentException} if the cuisine is empty or null */
-    public static void addCuisineVote(String cuisine) {
-      if (cuisine.isEmpty()) {
+    Method throws {@link IllegalArgumentException} if the cuisine or userId is empty or null */
+    public static void addCuisineVote(String userId, String cuisine) {
+      if (cuisine.isEmpty() || userId.isEmpty()) {
         throw new IllegalArgumentException(Constants.CUISINE_EMPTY_ERROR);
       }
 
-      Query.Filter filter = new Query.FilterPredicate(Constants.CUISINE_PARAMETER,
-        Query.FilterOperator.EQUAL, cuisine);
+      Query.Filter filter = new Query.FilterPredicate(Constants.USERID_PARAMETER,
+        Query.FilterOperator.EQUAL, userId);
       Query query = new Query(Constants.CUISINE_ENTITY).setFilter(filter);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
@@ -40,17 +49,16 @@ public final class CuisineDatastore {
       boolean updated = false;
 
       for (Entity entity : results.asIterable()) {
-        Integer votes = ((Long) entity.getProperty(Constants.VOTES_PARAMETER)).intValue();
-        entity.setProperty(Constants.VOTES_PARAMETER, votes + 1);
+        entity.setProperty(Constants.CUISINE_PARAMETER, cuisine);
         datastore.put(entity);
         updated = true;
       }
 
       if (!updated) {
-        Entity cuisineEntity = new Entity(Constants.CUISINE_ENTITY);
-        cuisineEntity.setProperty(Constants.CUISINE_PARAMETER, cuisine);
-        cuisineEntity.setProperty(Constants.VOTES_PARAMETER, 1);
-        datastore.put(cuisineEntity);
+        Entity cuisineVoteEntity = new Entity(Constants.CUISINE_ENTITY);
+        cuisineVoteEntity.setProperty(Constants.USERID_PARAMETER, userId);
+        cuisineVoteEntity.setProperty(Constants.CUISINE_PARAMETER, cuisine);
+        datastore.put(cuisineVoteEntity);
       }
 
     }

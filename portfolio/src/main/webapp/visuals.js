@@ -10,7 +10,8 @@ function drawChart() {
     data.addColumn('string', 'Cuisine');
     data.addColumn('number', 'Votes');
     Object.keys(cuisineVotes).forEach((cuisine) => {
-      data.addRow([cuisine, cuisineVotes[cuisine]]);
+      const cuisineName = cuisine.charAt(0).toUpperCase() + cuisine.substring(1);
+      data.addRow([cuisineName, cuisineVotes[cuisine]]);
     });
 
     const options = {
@@ -25,6 +26,66 @@ function drawChart() {
     const chart = new google.visualization.PieChart(document.getElementById('chart-container'));
     chart.draw(data, options);
   })
+}
+
+/**
+ * Validates that the select value is not empty before making POST request.
+ */
+function checkSelect() {
+  const value = document.getElementById("cuisine-select").value;
+  if (value === "") {
+    return false;
+  }
+}
+
+/**
+ * Adds the user's vote to the database and updates the chart accordingly. If the
+ * user has already voted then their vote is just updated (this way they cannot vote twice).
+ */
+function addCuisineVote() {
+  const selectVal = document.getElementById("cuisine-select").value;
+  if (selectVal !== "") {
+    let userId = getCookie("userId");
+    let cuisineVote = getCookie("cuisineVote");
+    console.log(document.cookie);
+    if (cuisineVote !== selectVal) {
+      if (userId === "") {
+        userId = Date.now().toString();
+        document.cookie = 'userId=' + userId;
+      }
+      cuisineVote = selectVal;
+      document.cookie = 'cuisineVote=' + selectVal;
+      console.log(document.cookie);
+
+      let cuisineVoteJson = {
+          'userId': userId,
+          'cuisine': cuisineVote
+      };
+
+      fetch('/cuisine-data', {method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(cuisineVoteJson)
+        })
+        .then(response => response.text()).then((data) => {
+          drawChart();
+        })
+    }
+  }
+}
+
+/** Returns the value mapped to the inputted parameter. */
+function getCookie(name) {
+  let key = name + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let cookies = decodedCookie.split(';');
+  for(let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i];
+    cookie = cookie.trim();
+    if (cookie.indexOf(key) == 0) {
+      return cookie.substring(key.length);
+    }
+  }
+  return "";
 }
 
 let map;

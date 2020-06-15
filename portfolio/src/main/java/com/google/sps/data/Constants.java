@@ -13,9 +13,9 @@ public final class Constants {
   public static String COMMENT_EMPTY_ERROR = "Comment should not be empty";
   
   /** cuisine related */
-  public static String CUISINE_ENTITY = "Cuisine";
+  public static String CUISINE_ENTITY = "CuisineVotes";
   public static String CUISINE_PARAMETER = "cuisine";
-  public static String VOTES_PARAMETER = "votes";
+  public static String USERID_PARAMETER = "userId";
   public static String CUISINE_EMPTY_ERROR = "Cuisine should not be empty";
 
   /** basketball court related */

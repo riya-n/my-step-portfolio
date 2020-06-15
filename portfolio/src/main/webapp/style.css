@@ -192,6 +192,7 @@ option {
   height: 30px;
   margin-top: 5px;
   cursor: pointer;
+  font-size: 18px;
 }
 
 input {

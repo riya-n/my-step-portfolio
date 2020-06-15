@@ -68,16 +68,6 @@ function checkForm() {
 }
 
 /**
- * Validates that the select value is not empty before making POST request.
- */
-function checkSelect() {
-  const value = document.getElementById("cuisine-select").value;
-  if (value === "") {
-    return false;
-  }
-}
-
-/**
  * Adds the selected commentsLimit to the localStorage
  * and then reloads the page.
  */
