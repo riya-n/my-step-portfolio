@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.CuisineDatastore;
+import com.google.sps.data.CuisineDatastore.CuisineVotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.sps.data.Constants;
+import com.google.sps.data.Constants.CuisineEnum;
 
 @WebServlet("/cuisine-data")
 public final class CuisineDataServlet extends HttpServlet {
@@ -19,7 +21,7 @@ public final class CuisineDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    Map<String, Integer> cuisineVotes = CuisineDatastore.fetchCuisineVotes();
+    Map<String, CuisineVotes> cuisineVotes = CuisineDatastore.fetchCuisineVotes();
 
     Gson gson = new Gson();
     String json = gson.toJson(cuisineVotes);
@@ -29,7 +31,7 @@ public final class CuisineDataServlet extends HttpServlet {
   }
 
   /** Class used to parse the json object in post request body. */
-  public class CuisineVote {
+  public class UserCuisineVote {
     private String userId;
     private String cuisine;
 
@@ -45,7 +47,7 @@ public final class CuisineDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    CuisineVote cuisineVote = new Gson().fromJson(request.getReader(), CuisineVote.class);
+    UserCuisineVote cuisineVote = new Gson().fromJson(request.getReader(), UserCuisineVote.class);
 
     if (cuisineVote == null) {
       log.error("cuisine vote should not be null");
@@ -61,7 +63,7 @@ public final class CuisineDataServlet extends HttpServlet {
       CuisineDatastore.addCuisineVote(userId, cuisine);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
-      log.error("cuisine and userId should not be empty.");
+      log.error("cuisine and userId should not be empty, cuisine should be valid.");
       response.setStatus(400);
       return;
     }

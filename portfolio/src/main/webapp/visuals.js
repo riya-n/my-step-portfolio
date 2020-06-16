@@ -13,10 +13,31 @@ function drawChart() {
     let data = new google.visualization.DataTable();
     data.addColumn('string', 'Cuisine');
     data.addColumn('number', 'Votes');
-    Object.keys(cuisineVotes).forEach((cuisine) => {
-      const cuisineName = cuisine.charAt(0).toUpperCase() + cuisine.substring(1);
-      data.addRow([cuisineName, cuisineVotes[cuisine]]);
-    });
+
+    document.getElementById("cuisine-select").innerHTML = '';
+
+    let selectElement = document.createElement("option");
+    const selectText = document.createTextNode("Select Here");
+    selectElement.appendChild(selectText);
+    selectElement.setAttribute("value", "");
+    selectElement.disabled = true;
+    document.getElementById("cuisine-select").appendChild(selectElement);
+
+    document.getElementById("cuisine-select").value = "";
+
+    for (const i in cuisineVotes) {
+      const cuisineName = cuisineVotes[i].cuisineName;
+      const votes = cuisineVotes[i].votes;
+      let element = document.createElement("option");
+      const text = document.createTextNode(cuisineName);
+      element.appendChild(text);
+      element.setAttribute("value", cuisineName);
+      document.getElementById("cuisine-select").appendChild(element);
+
+      if (votes > 0) {
+        data.addRow([cuisineName, votes]);
+      }
+    }
 
     const options = {
       pieHole: 0.4,
@@ -30,16 +51,6 @@ function drawChart() {
     const chart = new google.visualization.PieChart(document.getElementById('chart-container'));
     chart.draw(data, options);
   })
-}
-
-/**
- * Validates that the select value is not empty before making POST request.
- */
-function checkSelect() {
-  const value = document.getElementById("cuisine-select").value;
-  if (value === "") {
-    return false;
-  }
 }
 
 /**
@@ -67,8 +78,7 @@ function addCuisineVote() {
       fetch('/cuisine-data', {method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(cuisineVoteJson)
-        })
-        .then(response => response.text()).then((data) => {
+        }).then(response => response.text()).then((data) => {
           drawChart();
         })
     }

@@ -1,5 +1,7 @@
  package com.google.sps.data;
 
+ import java.util.List;
+
 /** Class to hold the constants used in this project. */
 public final class Constants {
   
@@ -15,6 +17,29 @@ public final class Constants {
   public static final String CUISINE_ENTITY = "CuisineVotes";
   public static final String CUISINE_PARAMETER = "cuisine";
   public static final String USERID_PARAMETER = "userId";
+
+  /** enum for the list of cuisine options */
+  public enum CuisineEnum {
+    JAPANESE("Japanese"),
+    INDONESIAN("Indonesian"),
+    CHINESE("Chinese"),
+    INDIAN("Indian"),
+    THAI("Thai"),
+    KOREAN("Korean"),
+    VIETNAMESE("Vietnamese"),
+    MALAY("Malay"),
+    SINGAPOREAN("Singaporean");
+
+    private final String localizedName;
+
+    CuisineEnum(String localizedName){
+      this.localizedName = localizedName;
+    }
+
+    public String getLocalizedName(){
+      return this.localizedName;
+    }
+  }
 
   /** basketball court related */
   public static final String JSON_FILE_PATH = "///home/riyanar/step/portfolio/src/main/webapp/WEB-INF/basketball-courts-nyc.json";
