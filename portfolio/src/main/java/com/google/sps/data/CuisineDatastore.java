@@ -6,7 +6,6 @@ import java.util.EnumMap;
 import com.google.appengine.api.datastore.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.AvailableCuisines;
-import com.google.sps.data.CuisineVotes;
 
 /** Class that handles writing/reading cuisine data from the datastore. */
 public final class CuisineDatastore {
