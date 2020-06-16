@@ -8,51 +8,62 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.sps.data.CommentsDatastore;
-import com.google.sps.data.Constants;
+import com.google.sps.data.Comment;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
 public final class CommentsServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(CommentsServlet.class.getName());
 
   /** Class that creates an object to hold the comments
   and limit on the number of comments displayed. */
   public final class CommentsApiResponse {
-    private List<CommentsDatastore.Comment> comments;
+    private List<Comment> comments;
 
-    public CommentsApiResponse(List<CommentsDatastore.Comment> comments) {
+    public CommentsApiResponse(List<Comment> comments) {
       this.comments = comments;
     }
 
     /** Returns list of comments. */
-    public List<CommentsDatastore.Comment> getComments() {
+    public List<Comment> getComments() {
       return this.comments;
     }
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String commentsLimitStr = (String) request.getParameter(Constants.COMMENTS_LIMIT_PARAMETER);
+    String commentsLimitStr = (String) request.getParameter(CommentsDatastore.COMMENTS_LIMIT_PARAMETER);
     if (commentsLimitStr.isEmpty()) {
       throw new IllegalArgumentException("comments limit should not be empty");
     }
 
-    Integer commentsLimit = Integer.parseInt(commentsLimitStr);
+    try {
+      Integer commentsLimit = Integer.parseInt(commentsLimitStr);
 
-    List<CommentsDatastore.Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
+      List<Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
 
-    CommentsApiResponse commentsData =
+      CommentsApiResponse commentsData =
         new CommentsApiResponse(comments);
 
-    Gson gson = new Gson();
-    String json = gson.toJson(commentsData);
+      Gson gson = new Gson();
+      String json = gson.toJson(commentsData);
 
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+      response.setContentType("application/json;");
+      response.getWriter().println(json);
+
+    } catch (NumberFormatException e) {
+      log.log(Level.SEVERE, "commentsLimitStr cannot be parsed for Integer", e);
+      response.setStatus(500);
+      return;
+    }
+    
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter(Constants.COMMENT_PARAMETER);
+    String comment = request.getParameter(CommentsDatastore.COMMENT_PARAMETER);
 
     try {
       CommentsDatastore.addComment(comment);

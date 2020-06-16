@@ -4,44 +4,30 @@ import java.util.List;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.common.collect.ImmutableList; 
-import com.google.sps.data.Constants;
+import com.google.sps.data.Comment;
 
 /** Class that handles writing/reading data from the datastore. */
 public final class CommentsDatastore {
 
-  /** Class to create Comment object. */
-  public final static class Comment {
-    private final String comment;
-    private final long timestamp;
+  public static final String COMMENT_ENTITY = "Comment";
+  public static final String COMMENT_PARAMETER = "comment";
+  public static final String TIMESTAMP_PARAMETER = "timestamp";
+  public static final String COMMENTS_LIMIT_PARAMETER = "commentsLimit";
 
-    public Comment(String comment, long timestamp) {
-      this.comment = comment;
-      this.timestamp = timestamp;
-    }
-
-    /** Returns comment. */
-    public String getComment() {
-        return this.comment;
-    }
-
-    /** Returns timestamp of when comment was created. */
-    public long getTimestamp() {
-        return this.timestamp;
-    }
-  } 
+  private CommentsDatastore() {}
     
     /** Method that retreives comments from the datastore and formats it. */
     public static List<Comment> fetchComments(int commentsLimit) {
-      Query query = new Query(Constants.COMMENT_ENTITY)
-        .addSort(Constants.TIMESTAMP_PARAMETER, SortDirection.DESCENDING);
+      Query query = new Query(COMMENT_ENTITY)
+        .addSort(TIMESTAMP_PARAMETER, SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       List<Entity> results = datastore.prepare(query)
         .asList(FetchOptions.Builder.withLimit(commentsLimit));
       
       ImmutableList.Builder<Comment> comments = ImmutableList.builder();
       for (Entity entity : results) {
-        String comment = (String) entity.getProperty(Constants.COMMENT_PARAMETER);
-        long timestamp = (long) entity.getProperty(Constants.TIMESTAMP_PARAMETER);
+        String comment = (String) entity.getProperty(COMMENT_PARAMETER);
+        long timestamp = (long) entity.getProperty(TIMESTAMP_PARAMETER);
         Comment newComment = new Comment(comment, timestamp);
         comments.add(newComment);
       }
@@ -58,9 +44,9 @@ public final class CommentsDatastore {
       
       long timestamp = System.currentTimeMillis();
 
-      Entity commentEntity = new Entity(Constants.COMMENT_ENTITY);
-      commentEntity.setProperty(Constants.COMMENT_PARAMETER, comment);
-      commentEntity.setProperty(Constants.TIMESTAMP_PARAMETER, timestamp);
+      Entity commentEntity = new Entity(COMMENT_ENTITY);
+      commentEntity.setProperty(COMMENT_PARAMETER, comment);
+      commentEntity.setProperty(TIMESTAMP_PARAMETER, timestamp);
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);

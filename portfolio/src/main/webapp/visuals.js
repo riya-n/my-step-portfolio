@@ -25,9 +25,8 @@ function drawChart() {
 
     document.getElementById("cuisine-select").value = "";
 
-    for (const i in cuisineVotes) {
-      const cuisineName = cuisineVotes[i].cuisineName;
-      const votes = cuisineVotes[i].votes;
+    for (const cuisineName in cuisineVotes) {
+      const votes = cuisineVotes[cuisineName];
       let element = document.createElement("option");
       const text = document.createTextNode(cuisineName);
       element.appendChild(text);
@@ -72,7 +71,7 @@ function addCuisineVote() {
 
       let cuisineVoteJson = {
           'userId': userId,
-          'cuisine': cuisineVote
+          'cuisineId': cuisineVote
       };
 
       fetch('/cuisine-data', {method: 'POST',

@@ -2,66 +2,44 @@ package com.google.sps.data;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.EnumMap;
 import com.google.appengine.api.datastore.*;
 import com.google.common.collect.ImmutableMap;
-import com.google.sps.data.Constants;
-import com.google.sps.data.Constants.CuisineEnum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.sps.data.AvailableCuisines;
+import com.google.sps.data.CuisineVotes;
 
 /** Class that handles writing/reading cuisine data from the datastore. */
 public final class CuisineDatastore {
-    private static final Logger log = LoggerFactory.getLogger(CuisineDatastore.class);
+  
+  public static final String CUISINE_ENTITY = "CuisineVotes";
+  public static final String CUISINE_PARAMETER = "cuisine";
+  public static final String USERID_PARAMETER = "userId";
 
-  /** Class used to store cuisineId, cuisineName, and votes. */
-  public static class CuisineVotes {
-    private CuisineEnum cuisineId;
-    private String cuisineName;
-    private Integer votes;
-
-    public CuisineVotes(CuisineEnum cuisineId, String cuisineName) {
-      this.cuisineId = cuisineId;
-      this.cuisineName = cuisineName;
-      this.votes = 0;
-    }
-
-    public void addVote() {
-      this.votes = this.votes + 1;
-    }
-
-    public CuisineEnum getCuisineId() {
-      return this.cuisineId;
-    }
-
-    public String getCuisineName() {
-      return this.cuisineName;
-    }
-
-    public Integer getVotes() {
-      return this.votes;
-    }
-  }
+  private CuisineDatastore() {}
 
     /** Method that retreives cuisine entities from the datastore and formats it. */
-    public static Map<String, CuisineVotes> fetchCuisineVotes() {
-      Query query = new Query(Constants.CUISINE_ENTITY);
+    public static Map<AvailableCuisines, Integer> fetchCuisineVotes() {
+      Query query = new Query(CUISINE_ENTITY);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       
-      Map<String, CuisineVotes> cuisineVotes = new HashMap<>();
-      for (CuisineEnum val : CuisineEnum.values()) {
-        CuisineVotes cuisineObj = new CuisineVotes(val, val.getLocalizedName());
-        cuisineVotes.put(val.getLocalizedName(), cuisineObj);
+      EnumMap<AvailableCuisines, Integer> cuisineVotes = new EnumMap<>(AvailableCuisines.class);
+
+      for (AvailableCuisines cuisineId : AvailableCuisines.values()) {
+        cuisineVotes.put(cuisineId, 0);
       }
 
       for (Entity entity : results.asIterable()) {
-        String cuisine = (String) entity.getProperty(Constants.CUISINE_PARAMETER);
-        CuisineVotes cuisineObj = cuisineVotes.get(cuisine);
-        cuisineObj.addVote();
-        cuisineVotes.replace(cuisine, cuisineObj);
+        String cuisine = (String) entity.getProperty(CUISINE_PARAMETER); //store the name of the enum (capitalized)
+        AvailableCuisines cuisineId = AvailableCuisines.getFromId(cuisine);
+        Integer votes = cuisineVotes.get(cuisineId);
+        if (votes == null) {
+          votes = 0;
+        }
+        cuisineVotes.put(cuisineId, votes + 1);
       }
 
-      ImmutableMap<String, CuisineVotes> immuMap =  ImmutableMap.<String, CuisineVotes>builder()
+      ImmutableMap<AvailableCuisines, Integer> immuMap =  ImmutableMap.<AvailableCuisines, Integer>builder()
         .putAll(cuisineVotes).build(); 
 
       return immuMap;
@@ -75,9 +53,9 @@ public final class CuisineDatastore {
         throw new IllegalArgumentException("cuisine and userId should not be empty.");
       }
 
-      CuisineEnum cuisineId = null;
-      for (CuisineEnum val : CuisineEnum.values()) {
-        if (val.getLocalizedName().toLowerCase().equals(cuisine)) {
+      AvailableCuisines cuisineId = null;
+      for (AvailableCuisines val : AvailableCuisines.values()) {
+        if (val.getLocalizedName().equals(cuisine)) {
           cuisineId = val;
         }
       }
@@ -86,24 +64,24 @@ public final class CuisineDatastore {
         throw new IllegalArgumentException("cuisine is not from the list of valid cuisines");
       }
 
-      Query.Filter filter = new Query.FilterPredicate(Constants.USERID_PARAMETER,
+      Query.Filter filter = new Query.FilterPredicate(USERID_PARAMETER,
         Query.FilterOperator.EQUAL, userId);
-      Query query = new Query(Constants.CUISINE_ENTITY).setFilter(filter);
+      Query query = new Query(CUISINE_ENTITY).setFilter(filter);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
 
       boolean updated = false;
 
       for (Entity entity : results.asIterable()) {
-        entity.setProperty(Constants.CUISINE_PARAMETER, cuisineId.getLocalizedName());
+        entity.setProperty(CUISINE_PARAMETER, cuisineId.getId());
         datastore.put(entity);
         updated = true;
       }
 
       if (!updated) {
-        Entity cuisineVoteEntity = new Entity(Constants.CUISINE_ENTITY);
-        cuisineVoteEntity.setProperty(Constants.USERID_PARAMETER, userId);
-        cuisineVoteEntity.setProperty(Constants.CUISINE_PARAMETER, cuisineId.getLocalizedName());
+        Entity cuisineVoteEntity = new Entity(CUISINE_ENTITY);
+        cuisineVoteEntity.setProperty(USERID_PARAMETER, userId);
+        cuisineVoteEntity.setProperty(CUISINE_PARAMETER, cuisineId.getId());
         datastore.put(cuisineVoteEntity);
       }
 
