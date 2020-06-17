@@ -20,7 +20,7 @@ public final class CommentsServlet extends HttpServlet {
   /** Class that creates an object to hold the comments
   and limit on the number of comments displayed. */
   public final class CommentsApiResponse {
-    private List<Comment> comments;
+    private final List<Comment> comments;
 
     public CommentsApiResponse(List<Comment> comments) {
       this.comments = comments;
@@ -35,7 +35,7 @@ public final class CommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String commentsLimitStr = (String) request.getParameter(CommentsDatastore.COMMENTS_LIMIT_PARAMETER);
-    if (commentsLimitStr.isEmpty()) {
+    if (commentsLimitStr == null || commentsLimitStr.isEmpty()) {
       throw new IllegalArgumentException("comments limit should not be empty");
     }
 
@@ -55,7 +55,7 @@ public final class CommentsServlet extends HttpServlet {
 
     } catch (NumberFormatException e) {
       log.log(Level.SEVERE, "commentsLimitStr cannot be parsed for Integer", e);
-      response.setStatus(500);
+      response.setStatus(400);
       return;
     }
     
@@ -64,6 +64,12 @@ public final class CommentsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter(CommentsDatastore.COMMENT_PARAMETER);
+
+    if (comment == null) {
+      log.severe("comment should not be null");
+      response.setStatus(400);
+      return;
+    }
 
     try {
       CommentsDatastore.addComment(comment);

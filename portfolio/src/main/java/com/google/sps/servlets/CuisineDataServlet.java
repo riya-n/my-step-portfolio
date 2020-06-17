@@ -22,9 +22,9 @@ public final class CuisineDataServlet extends HttpServlet {
   /** Class that creates an object to hold the cuisineId, cuisineName,
     and the number of votes for that cuisine. */
   public final class CuisineApiResponse {
-    private AvailableCuisines cuisineId;
-    private String cuisineName;
-    private int votes;
+    private final AvailableCuisines cuisineId;
+    private final String cuisineName;
+    private final int votes;
 
     public CuisineApiResponse(AvailableCuisines cuisineId,
       String cuisineName, int votes) {
@@ -87,10 +87,6 @@ public final class CuisineDataServlet extends HttpServlet {
       log.log(Level.SEVERE, "IllegalArg caught in CuisineDataServlet", e);
       response.setStatus(400);
       return;
-    } catch (NullPointerException e) {
-      log.log(Level.SEVERE, "NPE caught in CuisineDataServlet", e);
-      response.setStatus(400);
-      return; 
     }
 
     response.sendRedirect("/visuals.html");

@@ -5,7 +5,7 @@ public final class BasketballCourt {
     private final String id;
     private final String name;
     private final String location;
-    /** Integer because most entries have null numOfCourts but these are still valid entries. */
+    /** TODO: make this optional. numOfCourts field does not always exist (null). */
     private final Integer numOfCourts;
     private final double lat;
     private final double lon;
@@ -19,4 +19,5 @@ public final class BasketballCourt {
       this.lat = lat;
       this.lon = lon;
     }
+
 }

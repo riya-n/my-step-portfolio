@@ -28,7 +28,7 @@ public enum AvailableCuisines {
 
     /** valueOf() throws IllegalArg and NPE */
     public static AvailableCuisines getFromId(String id)
-      throws IllegalArgumentException, NullPointerException {
+      throws IllegalArgumentException {
       return AvailableCuisines.valueOf(id);
     }
     

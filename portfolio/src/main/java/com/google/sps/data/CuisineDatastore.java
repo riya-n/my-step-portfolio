@@ -3,13 +3,16 @@ package com.google.sps.data;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.google.appengine.api.datastore.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.AvailableCuisines;
 
 /** Class that handles writing/reading cuisine data from the datastore. */
 public final class CuisineDatastore {
-  
+    
+  private static final Logger log = Logger.getLogger(CuisineDatastore.class.getName());
   public static final String CUISINE_ENTITY = "CuisineVotes";
   public static final String CUISINE_PARAMETER = "cuisine";
   public static final String USERID_PARAMETER = "userId";
@@ -29,13 +32,17 @@ public final class CuisineDatastore {
       }
 
       for (Entity entity : results.asIterable()) {
-        String cuisine = (String) entity.getProperty(CUISINE_PARAMETER); //store the name of the enum (capitalized)
-        AvailableCuisines cuisineId = AvailableCuisines.getFromId(cuisine);
-        Integer votes = cuisineVotes.get(cuisineId);
-        if (votes == null) {
-          votes = 0;
+        try {
+          String dbCuisineId = (String) entity.getProperty(CUISINE_PARAMETER); //store the name of the enum (capitalized)
+          AvailableCuisines cuisineId = AvailableCuisines.getFromId(dbCuisineId);
+          Integer votes = cuisineVotes.get(cuisineId);
+          if (votes == null) {
+            votes = 0;
+          }
+          cuisineVotes.put(cuisineId, votes + 1);
+        } catch (IllegalArgumentException e) {
+          log.log(Level.SEVERE, "IllegalArg caught in fetchCuisineVotes", e);
         }
-        cuisineVotes.put(cuisineId, votes + 1);
       }
 
       ImmutableMap<AvailableCuisines, Integer> immuMap =  ImmutableMap.<AvailableCuisines, Integer>builder()

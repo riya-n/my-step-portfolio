@@ -14,13 +14,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import com.google.sps.data.BasketballCourt;
+import javax.servlet.ServletContext;
+import java.util.Scanner;
 
 /** Parses the basketball courts file and returns a list of basketball courts */
 public final class BasketballCourtsDatastore {
-  private static final Logger log = Logger.getLogger(BasketballCourtsDatastore.class.getName());
 
-  public static final String JSON_FILE_PATH =
-    "///home/riyanar/step/portfolio/src/main/webapp/WEB-INF/basketball-courts-nyc.json";
+  private static final Logger log = Logger.getLogger(BasketballCourtsDatastore.class.getName());
   public static final String ACCESSIBLE_PROPERTY = "Accessible";
   public static final String IS_ACCESSIBLE = "Y";
   public static final String ID_PROPERTY = "Prop_ID";
@@ -30,23 +30,18 @@ public final class BasketballCourtsDatastore {
   public static final String LAT_PROPERTY = "lat";
   public static final String LON_PROPERTY = "lon";
 
-  private BasketballCourtsDatastore() {}
+  public BasketballCourtsDatastore() {
+    
+  }
 
   /** Returns a list of the accessible basketball courts. If there is a bad entry, it should be
     ignored and the other entries should be returned. */
-  public static List<BasketballCourt> getAccessibleBasketballCourts() {
+  public static List<BasketballCourt> getAccessibleBasketballCourts(JsonArray allCourts) {
 
     ImmutableList.Builder<BasketballCourt> accessibleCourts =
       new ImmutableList.Builder<BasketballCourt>();
 
-    try {
-      String path = JSON_FILE_PATH;
-      BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-
-      Gson gson = new Gson();
-      JsonArray allCourts = gson.fromJson(bufferedReader, JsonArray.class);
-
-      for (JsonElement court : allCourts) {
+    for (JsonElement court : allCourts) {
         JsonObject courtObj = court.getAsJsonObject();
         JsonElement accessibleEl = courtObj.get(ACCESSIBLE_PROPERTY);
         if (!accessibleEl.isJsonNull()) {
@@ -59,10 +54,7 @@ public final class BasketballCourtsDatastore {
             }
           }
         }
-      }
-    } catch(FileNotFoundException e) {
-      log.log(Level.SEVERE, "Basketball courts file not found", e);
-    } 
+    }
 
     return accessibleCourts.build();
   }
