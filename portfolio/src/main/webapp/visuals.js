@@ -147,7 +147,7 @@ function showCourtsMarkers() {
         }).open(map, this);
     });
 
-    if (court.hasOwnProperty('numOfCourts')) {
+    if (court.numOfCourts.isPresent) {
       let location = new google.maps.LatLng(court.lat, court.lon);
       courtsMarkers.push(new google.maps.Circle({
         strokeColor: '#FF0000',
@@ -157,7 +157,7 @@ function showCourtsMarkers() {
         fillOpacity: 0.35,
         map: map,
         center: location,
-        radius: court.numOfCourts * 1000
+        radius: court.numOfCourts.value * 1000
       }));
     }
 }

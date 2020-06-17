@@ -55,7 +55,7 @@ public final class CommentsDatastore {
 
     /** Method that deletes all the comments currently in the datastore. */
     public static void deleteComments() {
-      Query query = new Query("Comment");
+      Query query = new Query(COMMENT_ENTITY);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       for (Entity entity : results.asIterable()) {

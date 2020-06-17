@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.OptionalInt;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.io.FileReader;
 import javax.servlet.ServletContext;
 import javax.servlet.*;
 import java.util.Scanner;
+import com.google.sps.data.BasketballCourt;
 
 /** Parses the basketball courts file and returns a list of basketball courts */
 public final class BasketballCourtsDatastore {
@@ -34,7 +36,7 @@ public final class BasketballCourtsDatastore {
   public static final String LAT_PROPERTY = "lat";
   public static final String LON_PROPERTY = "lon";
 
-  List<JsonObject> accessibleCourts;
+  List<BasketballCourt> accessibleCourts;
   JsonArray allCourts;
 
   public BasketballCourtsDatastore(ServletContext context) {
@@ -47,7 +49,7 @@ public final class BasketballCourtsDatastore {
   }
 
   /** Returns accessibleCourts list */
-  public List<JsonObject> getAccessibleCourts() {
+  public List<BasketballCourt> getAccessibleCourts() {
     if (accessibleCourts == null) {
       getAccessibleCourtsList(allCourts);
     }
@@ -56,10 +58,10 @@ public final class BasketballCourtsDatastore {
 
   /** Returns a list of the accessible basketball courts. If there is a bad entry, it should be
     ignored and the other entries should be returned. */
-  public static List<JsonObject> getAccessibleCourtsList(JsonArray allCourts) {
+  public static List<BasketballCourt> getAccessibleCourtsList(JsonArray allCourts) {
 
-    ImmutableList.Builder<JsonObject> accessibleCourts =
-      new ImmutableList.Builder<JsonObject>();
+    ImmutableList.Builder<BasketballCourt> accessibleCourts =
+      new ImmutableList.Builder<BasketballCourt>();
 
     for (JsonElement court : allCourts) {
         JsonObject courtObj = court.getAsJsonObject();
@@ -70,7 +72,7 @@ public final class BasketballCourtsDatastore {
             try {
               accessibleCourts.add(formatCourtJson(courtObj));
             } catch (IllegalArgumentException e) {
-              log.log(Level.SEVERE, "IllegalArg caught when creating court object from json", e);
+              log.log(Level.SEVERE, "Error when creating court object from json", e);
             }
           }
         }
@@ -83,7 +85,7 @@ public final class BasketballCourtsDatastore {
     * Throws {@link IllegalArgumentException} if the fields (not including numOfCourts) are null
     * or if numOfCourts is not greater than zero. NumOfCourts is null for most entries likely because
     * that data wasn't reported, but these entries still need to be included so numOfCourts=null is valid. */
-  private static JsonObject formatCourtJson(JsonObject jsonCourt) {
+  private static BasketballCourt formatCourtJson(JsonObject jsonCourt) {
     JsonElement idJson = jsonCourt.get(ID_PROPERTY);
     JsonElement nameJson = jsonCourt.get(NAME_PROPERTY);
     JsonElement locationJson = jsonCourt.get(LOCATION_PROPERTY);
@@ -101,24 +103,16 @@ public final class BasketballCourtsDatastore {
     String location = locationJson.getAsString();
     double lat = latJson.getAsDouble();
     double lon = lonJson.getAsDouble();
-    Integer numOfCourts = null;
+
+    OptionalInt numOfCourts = OptionalInt.empty();
     if (!numOfCourtsJson.isJsonNull()) {
-      numOfCourts = numOfCourtsJson.getAsNumber().intValue();
-      if (numOfCourts <= 0) {
+      int numOfCourtsInt = numOfCourtsJson.getAsNumber().intValue();
+      if (numOfCourtsInt <= 0) {
         throw new IllegalArgumentException("Number of courts should be greater than zero");
       }
+      numOfCourts = OptionalInt.of(numOfCourtsInt);
     }
-    
-    JsonObject basketballCourt = new JsonObject();
-    basketballCourt.addProperty("id", id);
-    basketballCourt.addProperty("name", name);
-    basketballCourt.addProperty("location", location);
-    if (numOfCourts != null) {
-      basketballCourt.addProperty("numOfCourts", numOfCourts);
-    }
-    basketballCourt.addProperty("lat", lat);
-    basketballCourt.addProperty("lon", lon);
 
-    return basketballCourt;
+    return new BasketballCourt(id, name, location, numOfCourts, lat, lon);
   }
 }

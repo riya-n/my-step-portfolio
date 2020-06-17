@@ -9,13 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.BasketballCourtsDatastore;
+import com.google.sps.data.BasketballCourt;
 
 /** Returns the accessible basketball courts in New York City */
 @WebServlet("/basketball-courts")
 public final class BasketballCourtsServlet extends HttpServlet {
-  
+    
   BasketballCourtsDatastore basketballCourtsDatastore;
-  List<JsonObject> accessibleCourts;
+  List<BasketballCourt> accessibleCourts;
 
   @Override
   public void init() {
