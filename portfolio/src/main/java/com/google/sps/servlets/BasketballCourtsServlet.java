@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.BasketballCourtsDatastore;
-import com.google.sps.data.BasketballCourt;
 
 /** Returns the accessible basketball courts in New York City */
 @WebServlet("/basketball-courts")
@@ -21,7 +21,7 @@ public final class BasketballCourtsServlet extends HttpServlet {
   
   private static final Logger log = Logger.getLogger(BasketballCourtsServlet.class.getName());
   public static final String JSON_FILE_PATH = "/WEB-INF/basketball-courts-nyc.json";
-  List<BasketballCourt> accessibleCourts;
+  List<JsonObject> accessibleCourts;
 
   @Override
   public void init() {
