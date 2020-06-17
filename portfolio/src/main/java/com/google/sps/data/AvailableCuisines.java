@@ -1,4 +1,4 @@
- package com.google.sps.data;
+package com.google.sps.data;
 
 /** enum for the list of cuisine options */
 public enum AvailableCuisines {
@@ -31,4 +31,5 @@ public enum AvailableCuisines {
       throws IllegalArgumentException, NullPointerException {
       return AvailableCuisines.valueOf(id);
     }
+    
 }

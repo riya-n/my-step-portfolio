@@ -25,18 +25,17 @@ function drawChart() {
 
     document.getElementById("cuisine-select").value = "";
 
-    for (const cuisineName in cuisineVotes) {
-      const votes = cuisineVotes[cuisineName];
+    cuisineVotes.forEach(({ cuisineId, cuisineName, votes }) => {
       let element = document.createElement("option");
       const text = document.createTextNode(cuisineName);
       element.appendChild(text);
-      element.setAttribute("value", cuisineName);
+      element.setAttribute("value", cuisineId);
       document.getElementById("cuisine-select").appendChild(element);
 
       if (votes > 0) {
         data.addRow([cuisineName, votes]);
       }
-    }
+    })
 
     const options = {
       pieHole: 0.4,

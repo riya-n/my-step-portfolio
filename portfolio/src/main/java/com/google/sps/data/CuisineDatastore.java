@@ -47,20 +47,9 @@ public final class CuisineDatastore {
     /** Method that updates the cuisine vote in the datastore.
     Method throws {@link IllegalArgumentException} if the cuisine or userId is empty.
     {@code null} */
-    public static void addCuisineVote(String userId, String cuisine) {
-      if (cuisine.isEmpty() || userId.isEmpty()) {
-        throw new IllegalArgumentException("cuisine and userId should not be empty.");
-      }
-
-      AvailableCuisines cuisineId = null;
-      for (AvailableCuisines val : AvailableCuisines.values()) {
-        if (val.getLocalizedName().equals(cuisine)) {
-          cuisineId = val;
-        }
-      }
-
-      if (cuisineId == null) {
-        throw new IllegalArgumentException("cuisine is not from the list of valid cuisines");
+    public static void addCuisineVote(String userId, AvailableCuisines cuisineId) {
+      if (userId.isEmpty()) {
+        throw new IllegalArgumentException("userId should not be empty.");
       }
 
       Query.Filter filter = new Query.FilterPredicate(USERID_PARAMETER,
