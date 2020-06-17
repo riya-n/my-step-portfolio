@@ -15,7 +15,8 @@ import java.util.logging.Level;
 /** Servlet that handles comments data. */
 @WebServlet("/comments")
 public final class CommentsServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(CommentsServlet.class.getName());
+
+  private static final Logger log = Logger.getLogger(CommentsServlet.class.getName());
 
   /** Class that creates an object to hold the comments
   and limit on the number of comments displayed. */
@@ -35,30 +36,30 @@ public final class CommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String commentsLimitStr = (String) request.getParameter(CommentsDatastore.COMMENTS_LIMIT_PARAMETER);
+    
     if (commentsLimitStr == null || commentsLimitStr.isEmpty()) {
-      throw new IllegalArgumentException("comments limit should not be empty");
+      log.severe("commentsLimitStr should not be null or empty");
+      response.setStatus(400);
+      return;
     }
 
+    Integer commentsLimit;
+
     try {
-      Integer commentsLimit = Integer.parseInt(commentsLimitStr);
-
-      List<Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
-
-      CommentsApiResponse commentsData =
-        new CommentsApiResponse(comments);
-
-      Gson gson = new Gson();
-      String json = gson.toJson(commentsData);
-
-      response.setContentType("application/json;");
-      response.getWriter().println(json);
-
+      commentsLimit = Integer.parseInt(commentsLimitStr);
     } catch (NumberFormatException e) {
       log.log(Level.SEVERE, "commentsLimitStr cannot be parsed for Integer", e);
       response.setStatus(400);
       return;
     }
-    
+
+    List<Comment> comments = CommentsDatastore.fetchComments(commentsLimit);
+    CommentsApiResponse commentsData = new CommentsApiResponse(comments);
+
+    Gson gson = new Gson();
+    String json = gson.toJson(commentsData);
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 
   @Override

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.CuisineDatastore;
-import com.google.sps.data.AvailableCuisines;
+import com.google.sps.data.AvailableCuisine;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.lang.Enum;
@@ -21,17 +21,18 @@ import java.lang.Enum;
 public final class CuisineDataServlet extends HttpServlet {
   
   private static final Logger log = Logger.getLogger(CuisineDataServlet.class.getName());
+
   public static final String CUISINEID_PARAMETER = "cuisineId";
   public static final String USERID_PARAMETER = "userId";
 
   /** Class that creates an object to hold the cuisineId, cuisineName,
     and the number of votes for that cuisine. */
   public final class CuisineApiResponse {
-    private final AvailableCuisines cuisineId;
+    private final AvailableCuisine cuisineId;
     private final String cuisineName;
     private final int votes;
 
-    public CuisineApiResponse(AvailableCuisines cuisineId,
+    public CuisineApiResponse(AvailableCuisine cuisineId,
       String cuisineName, int votes) {
         this.cuisineId = cuisineId;
         this.cuisineName = cuisineName;
@@ -42,10 +43,10 @@ public final class CuisineDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    Map<AvailableCuisines, Integer> cuisineVotes = CuisineDatastore.fetchCuisineVotes();
+    Map<AvailableCuisine, Integer> cuisineVotes = CuisineDatastore.fetchCuisineVotes();
    
     List<CuisineApiResponse> cuisineVotesResponse = new ArrayList<>();
-    for (AvailableCuisines cuisineId : cuisineVotes.keySet()) {
+    for (AvailableCuisine cuisineId : cuisineVotes.keySet()) {
       cuisineVotesResponse.add(new CuisineApiResponse(cuisineId,
         cuisineId.getLocalizedName(), cuisineVotes.get(cuisineId)));
     }
@@ -81,10 +82,11 @@ public final class CuisineDataServlet extends HttpServlet {
     String cuisine = cuisineEl.getAsString();
 
     try {
-      AvailableCuisines cuisineId = AvailableCuisines.getFromId(cuisine);
+      AvailableCuisine cuisineId = AvailableCuisine.getFromId(cuisine);
       CuisineDatastore.addCuisineVote(userId, cuisineId);
     } catch (IllegalArgumentException e) {
-      log.log(Level.SEVERE, "IllegalArg caught in CuisineDataServlet", e);
+      log.log(Level.SEVERE,
+        "availableCuisine not found from id or error in adding vote for cuisine", e);
       response.setStatus(400);
       return;
     }

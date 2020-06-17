@@ -1,7 +1,7 @@
 package com.google.sps.data;
 
 /** enum for the list of cuisine options */
-public enum AvailableCuisines {
+public enum AvailableCuisine {
     JAPANESE("Japanese"),
     INDONESIAN("Indonesian"),
     CHINESE("Chinese"),
@@ -14,7 +14,7 @@ public enum AvailableCuisines {
 
     private final String localizedName;
 
-    AvailableCuisines(String localizedName){
+    AvailableCuisine(String localizedName){
       this.localizedName = localizedName;
     }
 
@@ -27,9 +27,9 @@ public enum AvailableCuisines {
     }
 
     /** valueOf() throws IllegalArg and NPE */
-    public static AvailableCuisines getFromId(String id)
+    public static AvailableCuisine getFromId(String id)
       throws IllegalArgumentException {
-      return AvailableCuisines.valueOf(id);
+      return AvailableCuisine.valueOf(id);
     }
     
 }

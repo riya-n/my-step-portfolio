@@ -10,16 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.io.BufferedReader;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.servlet.ServletContext;
+import javax.servlet.*;
 import java.util.Scanner;
 
 /** Parses the basketball courts file and returns a list of basketball courts */
 public final class BasketballCourtsDatastore {
 
   private static final Logger log = Logger.getLogger(BasketballCourtsDatastore.class.getName());
+  
+  public static final String JSON_FILE_PATH = "/WEB-INF/basketball-courts-nyc.json";
   public static final String ACCESSIBLE_PROPERTY = "Accessible";
   public static final String IS_ACCESSIBLE = "Y";
   public static final String ID_PROPERTY = "Prop_ID";
@@ -29,11 +34,29 @@ public final class BasketballCourtsDatastore {
   public static final String LAT_PROPERTY = "lat";
   public static final String LON_PROPERTY = "lon";
 
-  private BasketballCourtsDatastore() {}
+  List<JsonObject> accessibleCourts;
+  JsonArray allCourts;
+
+  public BasketballCourtsDatastore(ServletContext context) {
+    try(Reader reader = new InputStreamReader(context.getResourceAsStream(JSON_FILE_PATH))) {
+      allCourts = new Gson().fromJson(reader, JsonArray.class);
+      accessibleCourts = BasketballCourtsDatastore.getAccessibleCourtsList(allCourts);
+    } catch (IOException e) {
+      log.log(Level.SEVERE, "Error when closing reader", e);
+    }
+  }
+
+  /** Returns accessibleCourts list */
+  public List<JsonObject> getAccessibleCourts() {
+    if (accessibleCourts == null) {
+      getAccessibleCourtsList(allCourts);
+    }
+    return accessibleCourts;
+  }
 
   /** Returns a list of the accessible basketball courts. If there is a bad entry, it should be
     ignored and the other entries should be returned. */
-  public static List<JsonObject> getAccessibleBasketballCourts(JsonArray allCourts) {
+  public static List<JsonObject> getAccessibleCourtsList(JsonArray allCourts) {
 
     ImmutableList.Builder<JsonObject> accessibleCourts =
       new ImmutableList.Builder<JsonObject>();
@@ -45,7 +68,7 @@ public final class BasketballCourtsDatastore {
           String accessibleStr = accessibleEl.getAsString();
           if (accessibleStr.equals(IS_ACCESSIBLE)) {
             try {
-              accessibleCourts.add(createCourtFromJson(courtObj));
+              accessibleCourts.add(formatCourtJson(courtObj));
             } catch (IllegalArgumentException e) {
               log.log(Level.SEVERE, "IllegalArg caught when creating court object from json", e);
             }
@@ -60,7 +83,7 @@ public final class BasketballCourtsDatastore {
     * Throws {@link IllegalArgumentException} if the fields (not including numOfCourts) are null
     * or if numOfCourts is not greater than zero. NumOfCourts is null for most entries likely because
     * that data wasn't reported, but these entries still need to be included so numOfCourts=null is valid. */
-  private static JsonObject createCourtFromJson(JsonObject jsonCourt) {
+  private static JsonObject formatCourtJson(JsonObject jsonCourt) {
     JsonElement idJson = jsonCourt.get(ID_PROPERTY);
     JsonElement nameJson = jsonCourt.get(NAME_PROPERTY);
     JsonElement locationJson = jsonCourt.get(LOCATION_PROPERTY);
