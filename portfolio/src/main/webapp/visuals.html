@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Cool Visuals</title>
+    <link rel="shortcut icon" type="image/png" href="/images/icon.png">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwbt3g_2O9duY7lPsB3RrkbUC87QKAc0"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="visuals.js"></script>
+  </head>
+  <body onload="createMap();">
+    <div id="content">
+      <div class="bar" id="top-bar">
+        <span id="name-container">Riya Narayan</span>
+        <span id="navbar-container">
+          <a href="/index.html">Home</a>
+          <a href="/projects.html">Projects</a>
+          <a href="/gallery.html">Gallery</a>
+          <a class="active" href="/visuals.html">Visuals</a>
+          <a href="/comments.html">Comments</a>
+        </span>
+      </div>
+      <div id="content-container">
+        <h1>I've been playing with some cool visuals...</h1>
+        <div class="info-container">
+          <div class="info" style="border-top: none">
+            <div class="project-name">Favorite Asian Cuisine</div>
+            <div class="project-description">
+              Vote for your favorite cuisine from the below list of popular Asian cuisines!
+            </div>
+            <div id="chart-container"></div>
+            <select name="cuisine" id="cuisine-select" style="width: -webkit-fill-available;"></select>
+            <button onclick="addCuisineVote()" class="submit" style="background-color: darkslategrey;">
+              Submit</button>
+          </div>
+          <div class="info">
+            <div class="project-name">Basketball Courts in New York City</div>
+            <div class="project-description" style="margin-bottom: 10px;">
+              I love playing basketball so I found
+              <a href="https://data.world/city-of-ny/b937-zdky" target="_blank" class="dataset">
+              this dataset</a> which lists the courts in NYC.
+              Click 
+              <span onclick="showCourtsMarkers()" class="span-button">here</span> 
+              to see where the accessible ones are.
+              <br>
+              The circles correspond to the number of courts
+              (for the data points that indicated this property).
+            </div>
+            <div id="map-container"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bar" id="bottom-bar">
+        <span>
+          <a href="https://www.linkedin.com/in/riya-narayan/" target="_blank">LinkedIn</a>
+          <a href="https://github.com/riya-n" target="_blank">GitHub</a>
+        </span>
+      </div>
+    </div>
+  </body>
+</html>
