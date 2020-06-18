@@ -15,7 +15,9 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,72 +29,60 @@ public final class FindMeetingQuery {
 
   private static final Logger log = Logger.getLogger(FindMeetingQuery.class.getName());
 
-  /**
-   * Assume that eventslist is sorted by start of meeting time.
-   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    
-    // need to sort the events by start time
-    
-    Collection<String> attendees = request.getAttendees();
-    long duration = request.getDuration();
-    ArrayList<Event> eventsInfo = new ArrayList<>(events);
-    
-    Collection<TimeRange> possibleTimes = new ArrayList<>();
 
-    int meetingLength = (int) duration;
     int startOfDay = TimeRange.START_OF_DAY;
     int endOfDay = TimeRange.END_OF_DAY;
+    int duration = (int) request.getDuration();
+    
+    List<TimeRange> unavailableTimes = new LinkedList<>();
+    List<TimeRange> availableTimes = new LinkedList<>();
 
-    log.info("eventsList: " + new Gson().toJson(events));
-    log.info("meetingLength: " + meetingLength);
-    if (meetingLength > TimeRange.WHOLE_DAY.duration()) {
-        return possibleTimes;
+    if (startOfDay + duration > endOfDay) {
+        return availableTimes;
     }
 
-    Set<String> attendeesSet = new HashSet<>(attendees);
-    // it should only include the events of the people going to this meeting
-    for (int i = 0; i < eventsInfo.size(); i++) {
-        Set<String> eventAttendees = eventsInfo.get(i).getAttendees();
-        Set<String> set = new HashSet<>(eventAttendees);
-        set.retainAll(attendeesSet);
-        if (set.size() == 0) {
-            eventsInfo.remove(i);
+    if (events.isEmpty() || request.getAttendees().isEmpty()) {
+        availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+        return availableTimes;
+    }
+
+    Set<String> attendees = new HashSet<>(request.getAttendees());
+
+    for (Event event : events) {
+        Set<String> eventAttendees = event.getAttendees();
+        Set<String> intersection = new HashSet<>(eventAttendees);
+        intersection.retainAll(attendees);
+        if (intersection.size() > 0) {
+            unavailableTimes.add(event.getWhen());
         }
     }
 
-    //remove any overlapping events
-    for (int i = 0; i < eventsInfo.size() - 1; i++) {
-        if (eventsInfo.get(i).getWhen().contains(eventsInfo.get(i + 1).getWhen().end())) {
-            eventsInfo.remove(i +1);
+    if (unavailableTimes.size() == 0) {
+        availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+        return availableTimes;
+    }
+
+    Collections.sort(unavailableTimes, TimeRange.ORDER_BY_START);
+
+    int start = startOfDay;
+    for (int i = 0; i < unavailableTimes.size(); i++) {
+        TimeRange time = unavailableTimes.get(i);
+        if (time.start() >= start + duration) {
+            availableTimes.add(TimeRange.fromStartEnd(start, time.start(), false));
         }
-    }
-
-    if (eventsInfo.size() == 0) {
-        possibleTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
-    }
-
-    for (int i = 0; i < eventsInfo.size(); i++) {
-        if (i == 0) {
-            int start = eventsInfo.get(i).getWhen().start();
-            if (start >= startOfDay + meetingLength) {
-                possibleTimes.add(TimeRange.fromStartEnd(startOfDay, start, false));
-            }
-        } 
-        if (i == eventsInfo.size() - 1) {
-            int start = eventsInfo.get(i).getWhen().end();
-            if (endOfDay >= start + meetingLength) {
-                possibleTimes.add(TimeRange.fromStartEnd(start, endOfDay, true));
-            }
-        } else {
-            int start = eventsInfo.get(i).getWhen().end();
-            int end = eventsInfo.get(i + 1).getWhen().start();
-            if (end >= start + meetingLength) {
-                possibleTimes.add(TimeRange.fromStartEnd(start, end, false));
+        if (time.end() > start) {
+            start = time.end();
+        }
+        if (i == unavailableTimes.size() - 1) {
+            if (endOfDay >= start + duration) {
+                availableTimes.add(TimeRange.fromStartEnd(start, endOfDay, true));
             }
         }
+        
     }
 
-    return possibleTimes;
+    return availableTimes;
   }
+
 }
