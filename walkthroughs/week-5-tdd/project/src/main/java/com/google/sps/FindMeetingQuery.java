@@ -16,18 +16,13 @@ package com.google.sps;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
-import com.google.gson.Gson;
-
 
 public final class FindMeetingQuery {
-
-  private static final Logger log = Logger.getLogger(FindMeetingQuery.class.getName());
 
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 
@@ -35,51 +30,71 @@ public final class FindMeetingQuery {
     int endOfDay = TimeRange.END_OF_DAY;
     int duration = (int) request.getDuration();
     
+    if (startOfDay + duration > endOfDay) {
+        return Arrays.asList();
+    }
+
+    if (events.isEmpty() || (request.getAttendees().isEmpty() && request.getOptionalAttendees().isEmpty())) {
+        return Arrays.asList(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+    }
+
+    List<TimeRange> availableTimes = new LinkedList<>();
+    
+    Set<String> attendees = new HashSet<>(request.getAttendees());
+
+    if (!attendees.isEmpty()) {
+        availableTimes = getAvailableTimes(events, duration, attendees);
+    }
+
+    if (!request.getOptionalAttendees().isEmpty()) {
+        attendees.addAll(request.getOptionalAttendees());
+        List<TimeRange> includingOptionalTimes = getAvailableTimes(events, duration, attendees);
+        if (!includingOptionalTimes.isEmpty()){
+            availableTimes = includingOptionalTimes;
+        }
+    }
+
+    return availableTimes;
+  }
+
+  public List<TimeRange> getAvailableTimes(Collection<Event> events, int duration, Set<String> attendees) {
+
+    int startOfDay = TimeRange.START_OF_DAY;
+    int endOfDay = TimeRange.END_OF_DAY;
+    
     List<TimeRange> unavailableTimes = new LinkedList<>();
     List<TimeRange> availableTimes = new LinkedList<>();
-
-    if (startOfDay + duration > endOfDay) {
-        return availableTimes;
-    }
-
-    if (events.isEmpty() || request.getAttendees().isEmpty()) {
-        availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
-        return availableTimes;
-    }
-
-    Set<String> attendees = new HashSet<>(request.getAttendees());
 
     for (Event event : events) {
         Set<String> eventAttendees = event.getAttendees();
         Set<String> intersection = new HashSet<>(eventAttendees);
         intersection.retainAll(attendees);
-        if (intersection.size() > 0) {
+        if (!intersection.isEmpty()) {
             unavailableTimes.add(event.getWhen());
         }
     }
 
-    if (unavailableTimes.size() == 0) {
+    if (unavailableTimes.isEmpty()) {
         availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
         return availableTimes;
     }
 
     Collections.sort(unavailableTimes, TimeRange.ORDER_BY_START);
 
-    int start = startOfDay;
+    int marker = startOfDay;
     for (int i = 0; i < unavailableTimes.size(); i++) {
         TimeRange time = unavailableTimes.get(i);
-        if (time.start() >= start + duration) {
-            availableTimes.add(TimeRange.fromStartEnd(start, time.start(), false));
+        if (time.start() >= marker + duration) {
+            availableTimes.add(TimeRange.fromStartEnd(marker, time.start(), false));
         }
-        if (time.end() > start) {
-            start = time.end();
+        if (time.end() > marker) {
+            marker = time.end();
         }
         if (i == unavailableTimes.size() - 1) {
-            if (endOfDay >= start + duration) {
-                availableTimes.add(TimeRange.fromStartEnd(start, endOfDay, true));
+            if (endOfDay >= marker + duration) {
+                availableTimes.add(TimeRange.fromStartEnd(marker, endOfDay, true));
             }
         }
-        
     }
 
     return availableTimes;
