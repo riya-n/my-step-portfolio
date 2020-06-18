@@ -273,11 +273,13 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 
+  /**
+   * Based on everyAttendeeIsConsidered, add an optional attendee C
+   * who has an all-day event. The same three time slots should be returned
+   * as when C was not invited.
+   */
   @Test
   public void ignoreOptionalAttendee() {
-    // Based on everyAttendeeIsConsidered, add an optional attendee C
-    // who has an all-day event. The same three time slots should be returned
-    // as when C was not invited.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
             Arrays.asList(PERSON_A)),
@@ -299,11 +301,13 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 
+  /**
+   * Also based on everyAttendeeIsConsidered, add an optional attendee C
+   * who has an event between 8:30 and 9:00. Now only the early and late
+   * parts of the day should be returned.
+   */
   @Test
   public void includeOptionalAttendee() {
-    // Also based on everyAttendeeIsConsidered, add an optional attendee C
-    // who has an event between 8:30 and 9:00. Now only the early and late
-    // parts of the day should be returned.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
             Arrays.asList(PERSON_A)),
@@ -324,11 +328,14 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 
+  /**
+   * Based on justEnoughRoom, add an optional attendee B who has an event
+   * between 8:30 and 8:45. The optional attendee should be ignored since
+   * considering their schedule would result in a time slot smaller than
+   * the requested time.
+   */
   @Test
   public void justEnoughRoomForRequiredAttendees() {
-    // Based on justEnoughRoom, add an optional attendee B who has an event between 8:30 and 8:45.
-    // The optional attendee should be ignored since considering their schedule would result in a
-    // time slot smaller than the requested time.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
             Arrays.asList(PERSON_A)),
@@ -347,10 +354,12 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 
+  /**
+   * No mandatory attendees, just two optional attendees with several gaps in
+   * their schedules. Those gaps should be identified and returned.
+   */
   @Test
   public void optionalAttendeesWithGaps() {
-    // No mandatory attendees, just two optional attendees with several gaps in their
-    // schedules. Those gaps should be identified and returned.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
             Arrays.asList(PERSON_A)),
@@ -371,10 +380,12 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 
+  /**
+   * No mandatory attendees, just two optional attendees with no gaps in
+   * their schedules. query should return that no time is available.
+   */
   @Test
   public void optionalAttendeesWithoutGaps() {
-    // No mandatory attendees, just two optional attendees with no gaps in their schedules.
-    // query should return that no time is available.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_1000AM, false),
             Arrays.asList(PERSON_A)),

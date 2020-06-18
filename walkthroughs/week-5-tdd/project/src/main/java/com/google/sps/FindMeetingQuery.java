@@ -24,6 +24,11 @@ import java.util.Set;
 
 public final class FindMeetingQuery {
 
+  /**
+   * This method find the available times to schedule a meeting. It finds times that
+   * all required attendees can make, and also tries to include optional attendees.
+   * However, it either includes all the optional attendees or none of them.
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 
     int startOfDay = TimeRange.START_OF_DAY;
@@ -57,6 +62,9 @@ public final class FindMeetingQuery {
     return availableTimes;
   }
 
+  /**
+   * This method returns the available times that the given attendees all have in common.
+   */
   public List<TimeRange> getAvailableTimes(Collection<Event> events, int duration, Set<String> attendees) {
 
     int startOfDay = TimeRange.START_OF_DAY;
