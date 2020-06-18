@@ -26,7 +26,11 @@ public enum AvailableCuisine {
       return this.name();
     }
 
-    /** valueOf() throws IllegalArg and NPE */
+    /** 
+    * Returns the cuisine matching the provided id.
+    * @throw IllegalArgumentException if a cuisine
+    * cannot be found for provided id.
+    */
     public static AvailableCuisine getFromId(String id)
       throws IllegalArgumentException {
       return AvailableCuisine.valueOf(id);

@@ -46,9 +46,9 @@ public final class CuisineDataServlet extends HttpServlet {
     Map<AvailableCuisine, Integer> cuisineVotes = CuisineDatastore.fetchCuisineVotes();
    
     List<CuisineApiResponse> cuisineVotesResponse = new ArrayList<>();
-    for (AvailableCuisine cuisineId : cuisineVotes.keySet()) {
-      cuisineVotesResponse.add(new CuisineApiResponse(cuisineId,
-        cuisineId.getLocalizedName(), cuisineVotes.get(cuisineId)));
+    for (Map.Entry<AvailableCuisine, Integer> cuisineVote : cuisineVotes.entrySet()) {
+      cuisineVotesResponse.add(new CuisineApiResponse(cuisineVote.getKey(),
+        cuisineVote.getKey().getLocalizedName(), cuisineVote.getValue()));
     }
 
     Gson gson = new Gson();
@@ -86,7 +86,8 @@ public final class CuisineDataServlet extends HttpServlet {
       CuisineDatastore.addCuisineVote(userId, cuisineId);
     } catch (IllegalArgumentException e) {
       log.log(Level.SEVERE,
-        "availableCuisine not found from id or error in adding vote for cuisine", e);
+        "availableCuisine not found from id or error in adding vote for cuisine."
+        + " Provided cuisine was " + cuisine, e);
       response.setStatus(400);
       return;
     }

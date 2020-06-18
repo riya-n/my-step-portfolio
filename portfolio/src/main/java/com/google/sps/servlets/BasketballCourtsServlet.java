@@ -16,16 +16,15 @@ import com.google.sps.data.BasketballCourt;
 public final class BasketballCourtsServlet extends HttpServlet {
     
   BasketballCourtsDatastore basketballCourtsDatastore;
-  List<BasketballCourt> accessibleCourts;
 
   @Override
   public void init() {
     basketballCourtsDatastore = new BasketballCourtsDatastore(getServletContext());
-    accessibleCourts = basketballCourtsDatastore.getAccessibleCourts();
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<BasketballCourt> accessibleCourts = basketballCourtsDatastore.getAccessibleCourts();
     response.setContentType("application/json");
     String json = new Gson().toJson(accessibleCourts);
     response.getWriter().println(json);

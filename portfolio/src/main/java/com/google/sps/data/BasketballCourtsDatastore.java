@@ -32,33 +32,30 @@ public final class BasketballCourtsDatastore {
   public static final String ID_PROPERTY = "Prop_ID";
   public static final String NAME_PROPERTY = "Name";
   public static final String LOCATION_PROPERTY = "Location";
-  public static final String NUMCOURTS_PROPERTY = "Num_of_Courts";
   public static final String LAT_PROPERTY = "lat";
   public static final String LON_PROPERTY = "lon";
+  public static final String NUMCOURTS_PROPERTY = "Num_of_Courts";
 
-  List<BasketballCourt> accessibleCourts;
-  JsonArray allCourts;
+  private List<BasketballCourt> accessibleCourts;
 
   public BasketballCourtsDatastore(ServletContext context) {
     try(Reader reader = new InputStreamReader(context.getResourceAsStream(JSON_FILE_PATH))) {
-      allCourts = new Gson().fromJson(reader, JsonArray.class);
-      accessibleCourts = BasketballCourtsDatastore.getAccessibleCourtsList(allCourts);
+      JsonArray allCourts = new Gson().fromJson(reader, JsonArray.class);
+      accessibleCourts = getAccessibleCourtsList(allCourts);
     } catch (IOException e) {
+      accessibleCourts = new ArrayList<>();
       log.log(Level.SEVERE, "Error when closing reader", e);
     }
   }
 
   /** Returns accessibleCourts list */
   public List<BasketballCourt> getAccessibleCourts() {
-    if (accessibleCourts == null) {
-      getAccessibleCourtsList(allCourts);
-    }
     return accessibleCourts;
   }
 
   /** Returns a list of the accessible basketball courts. If there is a bad entry, it should be
     ignored and the other entries should be returned. */
-  public static List<BasketballCourt> getAccessibleCourtsList(JsonArray allCourts) {
+  private static List<BasketballCourt> getAccessibleCourtsList(JsonArray allCourts) {
 
     ImmutableList.Builder<BasketballCourt> accessibleCourts =
       new ImmutableList.Builder<BasketballCourt>();
@@ -89,9 +86,9 @@ public final class BasketballCourtsDatastore {
     JsonElement idJson = jsonCourt.get(ID_PROPERTY);
     JsonElement nameJson = jsonCourt.get(NAME_PROPERTY);
     JsonElement locationJson = jsonCourt.get(LOCATION_PROPERTY);
-    JsonElement numOfCourtsJson = jsonCourt.get(NUMCOURTS_PROPERTY);
     JsonElement latJson = jsonCourt.get(LAT_PROPERTY);
     JsonElement lonJson = jsonCourt.get(LON_PROPERTY);
+    JsonElement numOfCourtsJson = jsonCourt.get(NUMCOURTS_PROPERTY);
 
     if (idJson.isJsonNull() || nameJson.isJsonNull() || locationJson.isJsonNull() ||
       latJson.isJsonNull() || lonJson.isJsonNull()) {
@@ -113,6 +110,6 @@ public final class BasketballCourtsDatastore {
       numOfCourts = OptionalInt.of(numOfCourtsInt);
     }
 
-    return new BasketballCourt(id, name, location, numOfCourts, lat, lon);
+    return new BasketballCourt(id, name, location, lat, lon, numOfCourts);
   }
 }

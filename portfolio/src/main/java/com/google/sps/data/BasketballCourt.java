@@ -10,18 +10,18 @@ public final class BasketballCourt {
     private final String id;
     private final String name;
     private final String location;
-    private final OptionalInt numOfCourts;
     private final double lat;
     private final double lon;
+    private final OptionalInt numOfCourts;
 
     public BasketballCourt(String id, String name, String location,
-      OptionalInt numOfCourts, double lat, double lon) {
+      double lat, double lon, OptionalInt numOfCourts) {
       this.id = id;
       this.name = name;
       this.location = location;
-      this.numOfCourts = numOfCourts;
       this.lat = lat;
       this.lon = lon;
+      this.numOfCourts = numOfCourts;
     }
 
 }

@@ -43,7 +43,7 @@ public final class CommentsServlet extends HttpServlet {
       return;
     }
 
-    Integer commentsLimit;
+    int commentsLimit;
 
     try {
       commentsLimit = Integer.parseInt(commentsLimitStr);
