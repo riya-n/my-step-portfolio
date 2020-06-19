@@ -35,14 +35,14 @@ public final class FindMeetingQuery {
 
     int startOfDay = TimeRange.START_OF_DAY;
     int endOfDay = TimeRange.END_OF_DAY;
-    int duration = (int) request.getDuration();
+    int durationMin = (int) request.getDuration();
     
-    if (startOfDay + duration > endOfDay) {
+    if (startOfDay + durationMin > endOfDay) {
         return ImmutableList.of();
     }
 
     if (events.isEmpty() || (request.getAttendees().isEmpty() && request.getOptionalAttendees().isEmpty())) {
-        return ImmutableList.of(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+        return ImmutableList.of(TimeRange.fromStartEnd(startOfDay, endOfDay, /* inclusive */ true));
     }
 
     List<TimeRange> availableTimes = new LinkedList<>();
@@ -50,12 +50,12 @@ public final class FindMeetingQuery {
     Set<String> attendees = new HashSet<>(request.getAttendees());
 
     if (!attendees.isEmpty()) {
-        availableTimes = getAvailableTimes(events, duration, attendees);
+        availableTimes = getAvailableTimes(events, durationMin, attendees);
     }
 
     if (!request.getOptionalAttendees().isEmpty()) {
         attendees.addAll(request.getOptionalAttendees());
-        List<TimeRange> includingOptionalTimes = getAvailableTimes(events, duration, attendees);
+        List<TimeRange> includingOptionalTimes = getAvailableTimes(events, durationMin, attendees);
         if (!includingOptionalTimes.isEmpty()){
             availableTimes = includingOptionalTimes;
         }
@@ -67,7 +67,7 @@ public final class FindMeetingQuery {
   /**
    * This method returns the available times that the given attendees all have in common.
    */
-  private List<TimeRange> getAvailableTimes(Collection<Event> events, int duration, Set<String> attendees) {
+  private List<TimeRange> getAvailableTimes(Collection<Event> events, int durationMin, Set<String> attendees) {
 
     int startOfDay = TimeRange.START_OF_DAY;
     int endOfDay = TimeRange.END_OF_DAY;
@@ -85,7 +85,7 @@ public final class FindMeetingQuery {
     }
 
     if (unavailableTimes.isEmpty()) {
-        availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+        availableTimes.add(TimeRange.fromStartEnd(startOfDay, endOfDay, /* inclusive */ true));
         return availableTimes;
     }
 
@@ -94,15 +94,15 @@ public final class FindMeetingQuery {
     int marker = startOfDay;
     for (int i = 0; i < unavailableTimes.size(); i++) {
         TimeRange time = unavailableTimes.get(i);
-        if (time.start() >= marker + duration) {
-            availableTimes.add(TimeRange.fromStartEnd(marker, time.start(), false));
+        if (time.start() >= marker + durationMin) {
+            availableTimes.add(TimeRange.fromStartEnd(marker, time.start(), /* inclusive */ false));
         }
         if (time.end() > marker) {
             marker = time.end();
         }
         if (i == unavailableTimes.size() - 1) {
-            if (endOfDay >= marker + duration) {
-                availableTimes.add(TimeRange.fromStartEnd(marker, endOfDay, true));
+            if (endOfDay >= marker + durationMin) {
+                availableTimes.add(TimeRange.fromStartEnd(marker, endOfDay, /* inclusive */ true));
             }
         }
     }
