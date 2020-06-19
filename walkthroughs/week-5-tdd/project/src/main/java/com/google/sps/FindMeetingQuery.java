@@ -105,7 +105,7 @@ public final class FindMeetingQuery {
         }
     }
 
-    return availableTimes;
+    return ImmutableList.copyOf(availableTimes);
   }
 
 }
