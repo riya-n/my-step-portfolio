@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList; 
+
 public final class FindMeetingQuery {
 
   /**
@@ -36,11 +38,11 @@ public final class FindMeetingQuery {
     int duration = (int) request.getDuration();
     
     if (startOfDay + duration > endOfDay) {
-        return Arrays.asList();
+        return ImmutableList.of();
     }
 
     if (events.isEmpty() || (request.getAttendees().isEmpty() && request.getOptionalAttendees().isEmpty())) {
-        return Arrays.asList(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
+        return ImmutableList.of(TimeRange.fromStartEnd(startOfDay, endOfDay, true));
     }
 
     List<TimeRange> availableTimes = new LinkedList<>();
@@ -59,13 +61,13 @@ public final class FindMeetingQuery {
         }
     }
 
-    return availableTimes;
+    return ImmutableList.copyOf(availableTimes);
   }
 
   /**
    * This method returns the available times that the given attendees all have in common.
    */
-  public List<TimeRange> getAvailableTimes(Collection<Event> events, int duration, Set<String> attendees) {
+  private List<TimeRange> getAvailableTimes(Collection<Event> events, int duration, Set<String> attendees) {
 
     int startOfDay = TimeRange.START_OF_DAY;
     int endOfDay = TimeRange.END_OF_DAY;
