@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList; 
+import com.google.common.collect.ImmutableList;
 
 public final class FindMeetingQuery {
 
@@ -77,9 +77,7 @@ public final class FindMeetingQuery {
 
     for (Event event : events) {
         Set<String> eventAttendees = event.getAttendees();
-        Set<String> intersection = new HashSet<>(eventAttendees);
-        intersection.retainAll(attendees);
-        if (!intersection.isEmpty()) {
+        if (!Collections.disjoint(eventAttendees, attendees)) {
             unavailableTimes.add(event.getWhen());
         }
     }
